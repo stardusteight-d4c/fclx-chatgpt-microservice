@@ -12,6 +12,13 @@ require (
 	github.com/go-chi/chi v1.5.4
 	github.com/spf13/viper v1.15.0
 	golang.org/x/net v0.9.0
+	google.golang.org/grpc v1.52.0
+	google.golang.org/protobuf v1.28.1
+)
+
+require (
+	github.com/golang/protobuf v1.5.2 // indirect
+	google.golang.org/genproto v0.0.0-20221227171554-f9683d7f8bef // indirect
 )
 
 require (

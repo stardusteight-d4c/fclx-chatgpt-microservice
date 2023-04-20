@@ -1,0 +1,32 @@
+POST http://localhost:8081/chat HTTP/1.1
+Content-Type: application/json
+Authorization: 123456
+
+{
+    "user_id": "1",
+    "user_message": "Olá, qual é o seu nome?"
+}
+
+###
+
+POST http://localhost:8081/chat HTTP/1.1
+Content-Type: application/json
+Authorization: 123456
+
+{
+    "chat_id": "b7ffe970-8be0-47cf-9e7d-fdb519d420cc",
+    "user_id": "1",
+    "user_message": "Eu quero saber mais sobre a linguagem GO!"
+}
+
+###
+
+POST http://localhost:8081/chat HTTP/1.1
+Content-Type: application/json
+Authorization: 123456
+
+{
+    "chat_id": "b7ffe970-8be0-47cf-9e7d-fdb519d420cc",
+    "user_id": "1",
+    "user_message": "Continue."
+}

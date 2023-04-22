@@ -2,6 +2,7 @@ package web
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -46,6 +47,7 @@ func (h *WebChatGPTHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	dto.Config = h.Config
+	fmt.Println(dto)
 	result, err := h.CompletionUseCase.Execute(r.Context(), dto)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -12,6 +12,6 @@ const proto = grpc.loadPackageDefinition(
 ) as unknown as ProtoGrpcType
 
 export const chatClient = new proto.pb.ChatService(
-  'chatservice:50052',
+  '172.21.0.1:50052',
   grpc.credentials.createInsecure()
 )

@@ -12,13 +12,13 @@ export async function GET(
 
   const token = await getToken({ req: request })
 
-  if (!token) {
-    setTimeout(async () => {
-      writeStream(writer, 'error', 'Unauthenticated')
-      await writer.close()
-    }, 100)
-    return response(transformStream, 401)
-  }
+  // if (!token) {
+  //   setTimeout(async () => {
+  //     writeStream(writer, 'error', 'Unauthenticated')
+  //     await writer.close()
+  //   }, 100)
+  //   return response(transformStream, 401)
+  // }
 
   const message = await prisma.message.findUniqueOrThrow({
     where: {
@@ -29,13 +29,13 @@ export async function GET(
     },
   })
 
-  if (message.chat.user_id !== token.sub) {
-    setTimeout(async () => {
-      writeStream(writer, 'error', 'Not Found')
-      await writer.close()
-    }, 100)
-    return response(transformStream, 404)
-  }
+  // if (message.chat.user_id !== token.sub) {
+  //   setTimeout(async () => {
+  //     writeStream(writer, 'error', 'Not Found')
+  //     await writer.close()
+  //   }, 100)
+  //   return response(transformStream, 404)
+  // }
 
   if (message.has_answered) {
     setTimeout(async () => {

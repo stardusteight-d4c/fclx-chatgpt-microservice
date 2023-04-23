@@ -18,6 +18,8 @@ export default class ClientHttp {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization:
+          'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..XnskWOEMEV-7teRh.Kfx1uSJGTBQzhMdy_gaDlCNz_Lz9UvSeKBCMBPHdKOZmN-WoZZRkOrFwmdbBDfKjRg7Y48VnP_9-K5xkUP4H6nGeCvc9ovRvuKlGFKm2ja_E3CjYjGLHRFLjrcYIu3qb9YPNYIZ41leztsY20HPbtQ7lyxUjKYwjDKvU3e59hvg8QNjc3dQyglaCvzs.TIHDzzl-FrxwwH3hKFr1Wg',
       },
       body: JSON.stringify(body),
     })

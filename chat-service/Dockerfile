@@ -1,3 +1,4 @@
+FROM ubuntu:latest
 FROM golang:1.20.3
 
 # Set environment variables

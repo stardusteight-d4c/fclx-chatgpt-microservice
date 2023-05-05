@@ -147,20 +147,37 @@ export default function Home() {
           )}
         </ul>
       </aside>
-      <main className="flex flex-1 relative">
-        <ul className="h-screen overflow-y-scroll bg-gray w-full text-text-variant">
+      <main className="flex flex-1 relative bg-[#343541]">
+        <ul className="h-screen overflow-y-scroll w-full text-text-variant">
           {messages!.map((message, index) => (
-            <li
+            <div
               key={index}
               className={`${
                 message.is_from_bot ? 'bg-[#444654]' : 'bg-[#343541]'
-              } w-full border-b border-b-[#24252b]`}
+              } w-full border-b border-b-[#24252b]/50`}
             >
-              {message.content}
-            </li>
+              <li className="w-full flex items-start gap-x-4 py-6 max-w-[768px] min-w-[768px] mx-auto">
+                {!message.is_from_bot ? (
+                  <img
+                    src="https://github.com/stardusteight-d4c.png"
+                    className="w-[30px] h-[30px] rounded-md object-cover"
+                  />
+                ) : (
+                  <img
+                    src="openai.jpg"
+                    className="w-[30px] h-[30px] rounded-md object-cover"
+                  />
+                )}
+
+                <span className="block -mt-[3px] capitalize">
+                  {message.content}
+                </span>
+              </li>
+            </div>
           ))}
           {messageLoading && <li>{messageLoading}</li>}
           {errorMessageLoading && <li>{errorMessageLoading}</li>}
+          <li className="max-h-[192px] min-h-[192px] w-full bg-[#34373f]"></li>
         </ul>
         <div className="absolute bottom-0 inset-x-0">
           <form id="form" onSubmit={onSubmit} className="relative w-full">

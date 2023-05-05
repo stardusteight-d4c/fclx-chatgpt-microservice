@@ -215,3 +215,43 @@ for call at
   metadata: Metadata { internalRepr: Map(0) {}, options: {} }
 }
 ```
+
+mysql -h localhost -P 3307 -u root -p
+
+
+
+
+Error: 2 UNKNOWN: error persisting new chat: Error 1146 (42S02): Table 'chat_test.chats' doesn't exist
+    at callErrorFromStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/call.js:31:19)
+    at Object.onReceiveStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client.js:347:73)
+    at Object.onReceiveStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client-interceptors.js:308:181)
+    at eval (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/resolving-call.js:94:78)
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+for call at
+    at ServiceClientImpl.makeServerStreamRequest (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client.js:330:34)
+    at ServiceClientImpl.eval (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/make-client.js:103:19)
+    at ChatServiceClient.chatStream (webpack-internal:///(sc_server)/./src/grpc/chat-service-client.ts:18:40)
+    at GET (webpack-internal:///(sc_server)/./src/app/api/messages/[messageId]/events/route.ts:55:32) {
+  code: 2,
+  details: "error persisting new chat: Error 1146 (42S02): Table 'chat_test.chats' doesn't exist",
+  metadata: Metadata {
+    internalRepr: Map(1) { 'content-type' => [Array] },
+    options: {}
+  }
+}
+
+
+
+docker compose exec chatservice bash
+go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+make migrate
+
+```
+root@e60e6bcb8958:/go/src# make migrate
+migrate -path=sql/migrations -database "mysql://root:root@tcp(mysql:3306)/chat_test" -verbose up
+2023/05/05 13:59:04 Start buffering 1/u init
+2023/05/05 13:59:04 Read and execute 1/u init
+2023/05/05 13:59:04 Finished 1/u init (read 28.559462ms, ran 273.345961ms)
+2023/05/05 13:59:04 Finished after 323.311801ms
+2023/05/05 13:59:04 Closing source and database
+```

@@ -6,6 +6,8 @@ import useSWR from 'swr'
 import useSWRSubscription from 'swr/subscription'
 import ClientHttp, { fetcher } from '@/http/http'
 import { Chat, Message } from '@prisma/client'
+import { PlusIcon } from './components/icons/Plus'
+import { MessageIcon } from './components/icons/Message'
 
 type ChatWithFirstMessage = Chat & {
   messages: [Message]
@@ -119,24 +121,32 @@ export default function Home() {
   }
 
   return (
-    <section className="flex gap-5">
-      <aside className="flex flex-col">
-        LATERAL
-        <button type="button" onClick={() => router.push('/')}>
-          New Chat
+    <section className="flex gap-5 w-full h-full">
+      <aside className="flex p-2 flex-col bg-black min-w-[260px] max-w-[260px] h-screen text-text">
+        <button
+          type="button"
+          onClick={() => router.push('/')}
+          className="p-3 mb-2 border border-white/20 rounded-md hover:bg-text/5 flex items-center justify-start gap-x-2"
+        >
+          <PlusIcon className="w-5 h-5" /> New Chat
         </button>
-        <ul>
+        <ul className="overflow-y-scroll flex flex-col overflow-x-hidden">
           {chats!.map(
             (chat: ChatWithFirstMessage, index: Key | null | undefined) => (
-              <li key={index} onClick={() => router.push(`/?id=${chat.id}`)}>
+              <li
+                key={index}
+                onClick={() => router.push(`/?id=${chat.id}`)}
+                className="group p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541] hover:brightness-110 rounded-md w-full text-text mr-2 hover:cursor-pointer flex items-center whitespace-nowrap"
+              >
+                <i className="absolute right-0 bg-gradient-to-r from-transparent via-black to-black group-hover:via-[#343541] group-hover:to-[#343541] w-[50px] h-full " />
+                <MessageIcon className="max-w-[20px] min-w-[20px] h-5" />
                 {chat.messages[0].content}
               </li>
             )
           )}
         </ul>
       </aside>
-      <main>
-        CHAT
+      <main className="flex-1">
         <ul>
           {messages!.map((message, index) => (
             <li key={index}>{message.content}</li>
@@ -145,10 +155,7 @@ export default function Home() {
           {errorMessageLoading && <li>{errorMessageLoading}</li>}
         </ul>
         <form id="form" onSubmit={onSubmit}>
-          <textarea
-            id="message-input"
-            placeholder="Digite sua pergunta"
-          />
+          <textarea id="message-input" placeholder="Digite sua pergunta" />
           <button type="submit">Enviar</button>
         </form>
       </main>

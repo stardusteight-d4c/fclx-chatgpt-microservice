@@ -25,7 +25,6 @@ export default function Home() {
       revalidateOnFocus: false,
     }
   )
-
   const { data: messages, mutate: mutateMessages } = useSWR<Message[]>(
     chatId ? `chats/${chatId}/messages` : null,
     fetcher,
@@ -34,7 +33,6 @@ export default function Home() {
       revalidateOnFocus: false,
     }
   )
-
   // server-sent event is when a web page automatically gets updates from a server
   const { data: messageLoading, error: errorMessageLoading } =
     useSWRSubscription(
@@ -86,7 +84,6 @@ export default function Home() {
         form.requestSubmit(submitButton)
         return
       }
-
       if (txtarea.scrollHeight >= 200) {
         txtarea.style.overflowY = 'scroll'
       } else {
@@ -99,7 +96,6 @@ export default function Home() {
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-
     const txtarea = event.currentTarget.querySelector(
       'textarea'
     ) as HTMLTextAreaElement
@@ -152,7 +148,7 @@ export default function Home() {
           <textarea
             id="message-input"
             placeholder="Digite sua pergunta"
-          ></textarea>
+          />
           <button type="submit">Enviar</button>
         </form>
       </main>

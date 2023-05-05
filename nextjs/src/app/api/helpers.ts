@@ -12,6 +12,7 @@ type RouteHandler = (
 export function withAuth(routeHandler: RouteHandler) {
   return async (req: NextRequest, config: Config) => {
     const token = await getToken({ req })
+    console.log(token)
     if (!token) {
       return NextResponse.json(
         { error: 'Not authenticated' },

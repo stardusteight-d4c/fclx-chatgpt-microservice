@@ -176,6 +176,8 @@ go mod tidy
 docker compose ps
 docker compose up
 docker ps
+docker compose ps chat-service
+dcoker compose ls
 
 docker compose exec <service_name> bash
 
@@ -192,3 +194,24 @@ mysql  | 2023-05-04T18:28:09.899430Z 1 [ERROR] [MY-011087] [Server] Different lo
 mysql  | 2023-05-04T18:28:09.899771Z 0 [ERROR] [MY-010020] [Server] Data Dictionary initialization failed.
 
 deletei o diretório .docker com 'sudo rm -r .docker' e corrigiu :)
+
+
+
+
+```
+Error: 14 UNAVAILABLE: No connection established
+    at callErrorFromStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/call.js:31:19)
+    at Object.onReceiveStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client.js:347:73)
+    at Object.onReceiveStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client-interceptors.js:308:181)
+    at eval (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/resolving-call.js:94:78)
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+for call at
+    at ServiceClientImpl.makeServerStreamRequest (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client.js:330:34)
+    at ServiceClientImpl.eval (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/make-client.js:103:19)
+    at ChatServiceClient.chatStream (webpack-internal:///(sc_server)/./src/grpc/chat-service-client.ts:18:40)
+    at GET (webpack-internal:///(sc_server)/./src/app/api/messages/[messageId]/events/route.ts:55:32) {
+  code: 14,
+  details: 'No connection established',
+  metadata: Metadata { internalRepr: Map(0) {}, options: {} }
+}
+```

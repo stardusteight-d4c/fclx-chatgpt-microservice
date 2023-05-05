@@ -8,6 +8,7 @@ import ClientHttp, { fetcher } from '@/http/http'
 import { Chat, Message } from '@prisma/client'
 import { PlusIcon } from './components/icons/Plus'
 import { MessageIcon } from './components/icons/Message'
+import { ArrowRightIcon } from './components/icons/ArrowRight'
 
 type ChatWithFirstMessage = Chat & {
   messages: [Message]
@@ -70,31 +71,31 @@ export default function Home() {
     setChatId(chatIdParam)
   }, [chatIdParam])
 
-  useEffect(() => {
-    const txtarea = document.querySelector(
-      '#message-input'
-    ) as HTMLTextAreaElement
-    txtarea.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault()
-      }
-    })
-    txtarea.addEventListener('keyup', (event) => {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        const form = document.querySelector('#form') as HTMLFormElement
-        const submitButton = form.querySelector('button') as HTMLButtonElement
-        form.requestSubmit(submitButton)
-        return
-      }
-      if (txtarea.scrollHeight >= 200) {
-        txtarea.style.overflowY = 'scroll'
-      } else {
-        txtarea.style.overflowY = 'hidden'
-        txtarea.style.height = 'auto'
-        txtarea.style.height = txtarea.scrollHeight + 'px'
-      }
-    })
-  }, [])
+  // useEffect(() => {
+  //   const txtarea = document.querySelector(
+  //     '#message-input'
+  //   ) as HTMLTextAreaElement
+  //   txtarea.addEventListener('keydown', (event) => {
+  //     if (event.key === 'Enter' && !event.shiftKey) {
+  //       event.preventDefault()
+  //     }
+  //   })
+  //   txtarea.addEventListener('keyup', (event) => {
+  //     if (event.key === 'Enter' && !event.shiftKey) {
+  //       const form = document.querySelector('#form') as HTMLFormElement
+  //       const submitButton = form.querySelector('button') as HTMLButtonElement
+  //       form.requestSubmit(submitButton)
+  //       return
+  //     }
+  //     if (txtarea.scrollHeight >= 200) {
+  //       txtarea.style.overflowY = 'scroll'
+  //     } else {
+  //       txtarea.style.overflowY = 'hidden'
+  //       txtarea.style.height = 'auto'
+  //       txtarea.style.height = txtarea.scrollHeight + 'px'
+  //     }
+  //   })
+  // }, [])
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -121,7 +122,7 @@ export default function Home() {
   }
 
   return (
-    <section className="flex gap-5 w-full h-full">
+    <section className="flex w-full h-full">
       <aside className="flex p-2 flex-col bg-black min-w-[260px] max-w-[260px] h-screen text-text">
         <button
           type="button"
@@ -146,18 +147,40 @@ export default function Home() {
           )}
         </ul>
       </aside>
-      <main className="flex-1">
-        <ul>
+      <main className="flex flex-1 relative">
+        <ul className="h-screen overflow-y-scroll bg-gray w-full text-text-variant">
           {messages!.map((message, index) => (
-            <li key={index}>{message.content}</li>
+            <li
+              key={index}
+              className={`${
+                message.is_from_bot ? 'bg-[#444654]' : 'bg-[#343541]'
+              } w-full border-b border-b-[#24252b]`}
+            >
+              {message.content}
+            </li>
           ))}
           {messageLoading && <li>{messageLoading}</li>}
           {errorMessageLoading && <li>{errorMessageLoading}</li>}
         </ul>
-        <form id="form" onSubmit={onSubmit}>
-          <textarea id="message-input" placeholder="Digite sua pergunta" />
-          <button type="submit">Enviar</button>
-        </form>
+        <div className="absolute bottom-0 inset-x-0">
+          <form id="form" onSubmit={onSubmit} className="relative w-full">
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-[55px]">
+              <div className="relative">
+                <textarea
+                  id="message-input"
+                  placeholder="Send a message"
+                  className="outline-none box-border py-[12px] pl-[16px] pr-[35px] h-[50px] border border-[#303039] max-w-[768px] min-w-[768px] max-h-[218px] bg-[#40414f] text-white placeholder:text-[#8e8ea0] resize-none rounded-md"
+                />
+                <button
+                  type="submit"
+                  className="absolute text-[#89899b] hover:bg-black rounded-md transition-all p-1 right-2 top-1/2 -translate-y-1/2"
+                >
+                  <ArrowRightIcon className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </main>
     </section>
   )

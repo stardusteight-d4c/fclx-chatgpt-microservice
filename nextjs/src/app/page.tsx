@@ -10,6 +10,7 @@ import { PlusIcon } from './components/icons/Plus'
 import { MessageIcon } from './components/icons/Message'
 import { ArrowRightIcon } from './components/icons/ArrowRight'
 import { LogoutIcon } from './components/icons/Logout'
+import { ChatError } from './components/chat/ChatError'
 
 type ChatWithFirstMessage = Chat & {
   messages: [Message]
@@ -211,7 +212,7 @@ export default function Home() {
                 </div>
               ))}
               {messageLoading && <li>{messageLoading}</li>}
-              {errorMessageLoading && <li>{errorMessageLoading}</li>}
+              {errorMessageLoading && <ChatError>{errorMessageLoading}</ChatError>}
               <li className="max-h-[192px] min-h-[192px] w-full bg-[#34373f]"></li>
             </>
           )}

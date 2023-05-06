@@ -11,6 +11,7 @@ import { MessageIcon } from './components/icons/Message'
 import { ArrowRightIcon } from './components/icons/ArrowRight'
 import { LogoutIcon } from './components/icons/Logout'
 import { ChatError } from './components/chat/ChatError'
+import { ChatMessage } from './components/chat/ChatMessage'
 
 type ChatWithFirstMessage = Chat & {
   messages: [Message]
@@ -130,7 +131,11 @@ export default function Home() {
       <aside className="flex p-2 flex-col bg-black min-w-[260px] max-w-[260px] h-screen text-text">
         <button
           type="button"
-          onClick={() => router.push('/')}
+          onClick={() => {
+            router.push('/')
+            setChatId(null)
+            setMessageId(null)
+          }}
           className="p-3 mb-2 border border-white/20 rounded-md hover:bg-text/5 flex items-center justify-start gap-x-2"
         >
           <PlusIcon className="w-5 h-5" /> New Chat
@@ -164,7 +169,7 @@ export default function Home() {
         </ul>
       </aside>
       <main className="flex flex-1 relative bg-[#343541]">
-        <ul className="h-screen overflow-y-scroll w-full text-text-variant">
+        <div className="h-screen overflow-y-scroll w-full text-text-variant">
           {messages === undefined || messages?.length === 0 ? (
             <>
               <div className="absolute flex flex-col items-center justify-center left-1/2 -translate-x-1/2 top-[40%] -translate-y-1/2">
@@ -184,39 +189,28 @@ export default function Home() {
               </div>
             </>
           ) : (
-            <>
+            <ul>
               {messages!.map((message, index) => (
-                <div
+                <ChatMessage
                   key={index}
-                  className={`${
-                    message.is_from_bot ? 'bg-[#444654]' : 'bg-[#343541]'
-                  } w-full`}
-                >
-                  <li className="w-full flex items-start gap-x-4 py-6 max-w-[768px] min-w-[768px] mx-auto">
-                    {!message.is_from_bot ? (
-                      <img
-                        src="https://github.com/stardusteight-d4c.png"
-                        className="w-[30px] h-[30px] rounded-lg object-cover"
-                      />
-                    ) : (
-                      <img
-                        src="openai.png"
-                        className="w-[30px] h-[30px] rounded-lg object-cover"
-                      />
-                    )}
-
-                    <span className="block -mt-[4px] leading-7 tracking-wide capitalize">
-                      {message.content}
-                    </span>
-                  </li>
-                </div>
+                  content={message.content}
+                  is_from_bot={message.is_from_bot}
+                />
               ))}
-              {messageLoading && <li>{messageLoading}</li>}
-              {errorMessageLoading && <ChatError>{errorMessageLoading}</ChatError>}
+              {messageLoading && (
+                <ChatMessage
+                  content={messageLoading}
+                  is_from_bot={true}
+                  loading={true}
+                />
+              )}
+              {errorMessageLoading && (
+                <ChatError>{errorMessageLoading}</ChatError>
+              )}
               <li className="max-h-[192px] min-h-[192px] w-full bg-[#34373f]"></li>
-            </>
+            </ul>
           )}
-        </ul>
+        </div>
         <div className="absolute bottom-0 inset-x-0">
           <i className="absolute bottom-0 max-h-[192px] min-h-[192px] w-full bg-gradient-to-t from-[#34373f] via-[#34373f] to-transparent" />
 

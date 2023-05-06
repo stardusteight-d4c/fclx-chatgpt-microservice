@@ -160,16 +160,16 @@ export default function Home() {
                 {!message.is_from_bot ? (
                   <img
                     src="https://github.com/stardusteight-d4c.png"
-                    className="w-[30px] h-[30px] rounded-md object-cover"
+                    className="w-[30px] h-[30px] rounded-lg object-cover"
                   />
                 ) : (
                   <img
-                    src="openai.jpg"
-                    className="w-[30px] h-[30px] rounded-md object-cover"
+                    src="openai.png"
+                    className="w-[30px] h-[30px] rounded-lg object-cover"
                   />
                 )}
 
-                <span className="block -mt-[3px] capitalize">
+                <span className="block -mt-[4px] leading-7 capitalize">
                   {message.content}
                 </span>
               </li>
@@ -180,9 +180,11 @@ export default function Home() {
           <li className="max-h-[192px] min-h-[192px] w-full bg-[#34373f]"></li>
         </ul>
         <div className="absolute bottom-0 inset-x-0">
+          <i className="absolute bottom-0 max-h-[192px] min-h-[192px] w-full bg-gradient-to-t from-[#34373f] via-[#34373f] to-transparent" />
+
           <form id="form" onSubmit={onSubmit} className="relative w-full">
             <div className="absolute left-1/2 -translate-x-1/2 bottom-[55px]">
-              <div className="relative">
+              <div className="relative w-full">
                 <textarea
                   id="message-input"
                   placeholder="Send a message"
@@ -195,6 +197,11 @@ export default function Home() {
                   <ArrowRightIcon className="w-5 h-5" />
                 </button>
               </div>
+              <span className="absolute left-1/2 -translate-x-1/2 -bottom-6 text-[#c5c5d2] text-xs whitespace-nowrap">
+                Free Research Preview. ChatGPT may produce inaccurate
+                information about people, places, or facts. ChatGPT May 3
+                Version
+              </span>
             </div>
           </form>
         </div>

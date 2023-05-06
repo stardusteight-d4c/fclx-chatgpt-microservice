@@ -9,6 +9,7 @@ import { Chat, Message } from '@prisma/client'
 import { PlusIcon } from './components/icons/Plus'
 import { MessageIcon } from './components/icons/Message'
 import { ArrowRightIcon } from './components/icons/ArrowRight'
+import { LogoutIcon } from './components/icons/Logout'
 
 type ChatWithFirstMessage = Chat & {
   messages: [Message]
@@ -121,6 +122,8 @@ export default function Home() {
     txtarea.value = ''
   }
 
+  console.log(messages)
+
   return (
     <section className="flex w-full h-full">
       <aside className="flex p-2 flex-col bg-black min-w-[260px] max-w-[260px] h-screen text-text">
@@ -131,13 +134,13 @@ export default function Home() {
         >
           <PlusIcon className="w-5 h-5" /> New Chat
         </button>
-        <ul className="overflow-y-scroll flex flex-col overflow-x-hidden">
+        <ul className="overflow-y-scroll flex flex-col overflow-x-hidden h-full">
           {chats!.map(
             (chat: ChatWithFirstMessage, index: Key | null | undefined) => (
               <li
                 key={index}
                 onClick={() => router.push(`/?id=${chat.id}`)}
-                className="group p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541] hover:brightness-110 rounded-md w-full text-text mr-2 hover:cursor-pointer flex items-center whitespace-nowrap"
+                className="group p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541]/90 rounded-md w-full text-text mr-2 hover:cursor-pointer flex items-center whitespace-nowrap"
               >
                 <i className="absolute right-0 bg-gradient-to-r from-transparent via-black to-black group-hover:via-[#343541] group-hover:to-[#343541] w-[50px] h-full " />
                 <MessageIcon className="max-w-[20px] min-w-[20px] h-5" />
@@ -145,39 +148,73 @@ export default function Home() {
               </li>
             )
           )}
+          <div className="mt-auto border-t border-t-gray pt-2">
+            <li className="group p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541]/90 rounded-md w-full text-text mr-2 hover:cursor-default flex items-center whitespace-nowrap">
+              <img
+                src="https://github.com/stardusteight-d4c.png"
+                className="w-[30px] h-[30px] rounded-lg object-cover"
+              />
+              <span className="w-[140px] truncate">
+                Gabriel Senaaaaaaaaaa aaaa
+              </span>
+              <LogoutIcon className="w-5 h-5 ml-auto cursor-pointer" />
+            </li>
+          </div>
         </ul>
       </aside>
       <main className="flex flex-1 relative bg-[#343541]">
         <ul className="h-screen overflow-y-scroll w-full text-text-variant">
-          {messages!.map((message, index) => (
-            <div
-              key={index}
-              className={`${
-                message.is_from_bot ? 'bg-[#444654]' : 'bg-[#343541]'
-              } w-full border-b border-b-[#24252b]/50`}
-            >
-              <li className="w-full flex items-start gap-x-4 py-6 max-w-[768px] min-w-[768px] mx-auto">
-                {!message.is_from_bot ? (
-                  <img
-                    src="https://github.com/stardusteight-d4c.png"
-                    className="w-[30px] h-[30px] rounded-lg object-cover"
-                  />
-                ) : (
-                  <img
-                    src="openai.png"
-                    className="w-[30px] h-[30px] rounded-lg object-cover"
-                  />
-                )}
-
-                <span className="block -mt-[4px] leading-7 capitalize">
-                  {message.content}
+          {messages === undefined || messages?.length === 0 ? (
+            <>
+              <div className="absolute flex flex-col items-center justify-center left-1/2 -translate-x-1/2 top-[40%] -translate-y-1/2">
+                <div className="honeycomb">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+                <h2 className="text-4xl font-bold mt-8">ChatGPT</h2>
+                <span className="text-xl text-[#c5c5d2] text-center opacity-70 font-medium mt-2">
+                  Want to expand your knowledge? Chat with ChatGPT!
                 </span>
-              </li>
-            </div>
-          ))}
-          {messageLoading && <li>{messageLoading}</li>}
-          {errorMessageLoading && <li>{errorMessageLoading}</li>}
-          <li className="max-h-[192px] min-h-[192px] w-full bg-[#34373f]"></li>
+              </div>
+            </>
+          ) : (
+            <>
+              {messages!.map((message, index) => (
+                <div
+                  key={index}
+                  className={`${
+                    message.is_from_bot ? 'bg-[#444654]' : 'bg-[#343541]'
+                  } w-full`}
+                >
+                  <li className="w-full flex items-start gap-x-4 py-6 max-w-[768px] min-w-[768px] mx-auto">
+                    {!message.is_from_bot ? (
+                      <img
+                        src="https://github.com/stardusteight-d4c.png"
+                        className="w-[30px] h-[30px] rounded-lg object-cover"
+                      />
+                    ) : (
+                      <img
+                        src="openai.png"
+                        className="w-[30px] h-[30px] rounded-lg object-cover"
+                      />
+                    )}
+
+                    <span className="block -mt-[4px] leading-7 tracking-wide capitalize">
+                      {message.content}
+                    </span>
+                  </li>
+                </div>
+              ))}
+              {messageLoading && <li>{messageLoading}</li>}
+              {errorMessageLoading && <li>{errorMessageLoading}</li>}
+              <li className="max-h-[192px] min-h-[192px] w-full bg-[#34373f]"></li>
+            </>
+          )}
         </ul>
         <div className="absolute bottom-0 inset-x-0">
           <i className="absolute bottom-0 max-h-[192px] min-h-[192px] w-full bg-gradient-to-t from-[#34373f] via-[#34373f] to-transparent" />
@@ -199,8 +236,14 @@ export default function Home() {
               </div>
               <span className="absolute left-1/2 -translate-x-1/2 -bottom-6 text-[#c5c5d2] text-xs whitespace-nowrap">
                 Free Research Preview. ChatGPT may produce inaccurate
-                information about people, places, or facts. ChatGPT May 3
-                Version
+                information about people, places, or facts.{' '}
+                <a
+                  href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes"
+                  target="_blank"
+                  className="cursor-pointer underline"
+                >
+                  ChatGPT May 3 Version
+                </a>
               </span>
             </div>
           </form>

@@ -129,6 +129,15 @@ body {
   top: 0;
 }
 
-code, pre {
-  @apply !bg-[#000] !rounded-md;
+[class^='hljs language-'] {
+  margin-block: 20px !important;
+  display: block !important;
+  background-color: black;
+  border-radius: 0.375rem/* 6px */ !important;
+}
+
+code:not([class]):not(:first-child:not(pre) + code) {
+  background-color: #f3f3f350 !important;
+  border-radius: 0.375rem/* 6px */ !important;
+  padding: 2px !important;
 }

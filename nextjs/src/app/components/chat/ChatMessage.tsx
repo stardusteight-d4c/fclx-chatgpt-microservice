@@ -32,12 +32,18 @@ export function ChatMessage({
             className="w-[30px] h-[30px] rounded-lg object-cover"
           />
         )}
-        <div
-          className="relative block -mt-[4px] leading-7 tracking-wide capitaliz transition duration-100 ease-linear break-words"
-          dangerouslySetInnerHTML={{
-            __html: marked(content, { breaks: true }), //sanitize: true
-          }}
-        />
+        {is_from_bot ? (
+          <div
+            className="relative block -mt-[4px] leading-7 tracking-wide capitaliz transition duration-100 ease-linear break-words"
+            dangerouslySetInnerHTML={{
+              __html: marked(content, { breaks: true }), //sanitize: true
+            }}
+          />
+        ) : (
+          <li className="relative block -mt-[4px] leading-7 tracking-wide capitaliz transition duration-100 ease-linear break-words">
+            {content}
+          </li>
+        )}
       </div>
       {loading && (
         <div className="flex items-center justify-center pb-2">

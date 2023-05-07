@@ -255,3 +255,8 @@ migrate -path=sql/migrations -database "mysql://root:root@tcp(mysql:3306)/chat_t
 2023/05/05 13:59:04 Finished after 323.311801ms
 2023/05/05 13:59:04 Closing source and database
 ```
+
+
+1- Ajustar Front: deixar a interface bem dinâmica, perfomática e com boa usabilidade;
+2- Adicionar autenticação via Google com Nextauth;
+3- Adicionar opção de deletar e editar o nome de conversas/chat.

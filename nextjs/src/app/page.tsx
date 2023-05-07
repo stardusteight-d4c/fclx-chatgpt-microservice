@@ -124,8 +124,6 @@ export default function Home() {
     txtarea.value = ''
   }
 
-  console.log(messages)
-
   return (
     <section className="flex w-full h-full">
       <aside className="flex p-2 flex-col bg-black min-w-[260px] max-w-[260px] h-screen text-text">

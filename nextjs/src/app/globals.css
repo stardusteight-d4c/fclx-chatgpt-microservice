@@ -137,7 +137,7 @@ body {
 }
 
 code:not([class]):not(:first-child:not(pre) + code) {
-  background-color: #f3f3f350 !important;
+  background-color: #f3f3f330 !important;
   border-radius: 0.375rem/* 6px */ !important;
   padding: 2px !important;
 }

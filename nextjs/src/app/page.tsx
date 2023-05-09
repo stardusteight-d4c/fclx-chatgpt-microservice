@@ -74,31 +74,31 @@ export default function Home() {
     setChatId(chatIdParam)
   }, [chatIdParam])
 
-  // useEffect(() => {
-  //   const txtarea = document.querySelector(
-  //     '#message-input'
-  //   ) as HTMLTextAreaElement
-  //   txtarea.addEventListener('keydown', (event) => {
-  //     if (event.key === 'Enter' && !event.shiftKey) {
-  //       event.preventDefault()
-  //     }
-  //   })
-  //   txtarea.addEventListener('keyup', (event) => {
-  //     if (event.key === 'Enter' && !event.shiftKey) {
-  //       const form = document.querySelector('#form') as HTMLFormElement
-  //       const submitButton = form.querySelector('button') as HTMLButtonElement
-  //       form.requestSubmit(submitButton)
-  //       return
-  //     }
-  //     if (txtarea.scrollHeight >= 200) {
-  //       txtarea.style.overflowY = 'scroll'
-  //     } else {
-  //       txtarea.style.overflowY = 'hidden'
-  //       txtarea.style.height = 'auto'
-  //       txtarea.style.height = txtarea.scrollHeight + 'px'
-  //     }
-  //   })
-  // }, [])
+  useEffect(() => {
+    const txtarea = document.querySelector(
+      '#message-input'
+    ) as HTMLTextAreaElement
+    txtarea.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault()
+      }
+    })
+    txtarea.addEventListener('keyup', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        const form = document.querySelector('#form') as HTMLFormElement
+        const submitButton = form.querySelector('button') as HTMLButtonElement
+        form.requestSubmit(submitButton)
+        return
+      }
+      if (txtarea.scrollHeight >= 200) {
+        txtarea.style.overflowY = 'scroll'
+      } else {
+        txtarea.style.overflowY = 'hidden'
+        txtarea.style.height = 'auto'
+        txtarea.style.height = txtarea.scrollHeight + 'px'
+      }
+    })
+  }, [])
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -138,7 +138,7 @@ export default function Home() {
         >
           <PlusIcon className="w-5 h-5" /> New Chat
         </button>
-        <ul className="overflow-y-scroll flex flex-col overflow-x-hidden h-full">
+        <ul className="scrollHiddenCSO scrollHiddenIEF overflow-y-scroll flex flex-col overflow-x-hidden h-full">
           {chats!.map(
             (chat: ChatWithFirstMessage, index: Key | null | undefined) => (
               <li
@@ -158,9 +158,7 @@ export default function Home() {
                 src="https://github.com/stardusteight-d4c.png"
                 className="w-[30px] h-[30px] rounded-lg object-cover"
               />
-              <span className="w-[140px] truncate">
-                Gabriel Senaaaaaaaaaa aaaa
-              </span>
+              <span className="w-[140px] truncate">Gabriel Sena</span>
               <LogoutIcon className="w-5 h-5 ml-auto cursor-pointer" />
             </li>
           </div>
@@ -211,7 +209,6 @@ export default function Home() {
         </div>
         <div className="absolute bottom-0 inset-x-0">
           <i className="absolute bottom-0 max-h-[192px] min-h-[192px] w-full bg-gradient-to-t from-[#34373f] via-[#34373f] to-transparent" />
-
           <form id="form" onSubmit={onSubmit} className="relative w-full">
             <div className="absolute left-1/2 -translate-x-1/2 bottom-[55px]">
               <div className="relative w-full">

@@ -16,7 +16,7 @@ export function ChatMessage({
 
   useEffect(() => {
     hljs.highlightAll()
-  }, [])
+  })
 
   return (
     <li className={`${background} w-full`}>
@@ -46,7 +46,7 @@ export function ChatMessage({
         )}
       </div>
       {loading && (
-        <div className="flex items-center justify-center pb-2">
+        <div className="flex relative items-center justify-center pb-2">
           <Loading />
         </div>
       )}

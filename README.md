@@ -217,8 +217,8 @@ for call at
 ```
 
 mysql -h localhost -P 3307 -u root -p
-
-
+docker exec -it nextjs-db-1 mysql -uroot -proot -h db
+docker logs nextjs-db-1
 
 
 Error: 2 UNKNOWN: error persisting new chat: Error 1146 (42S02): Table 'chat_test.chats' doesn't exist

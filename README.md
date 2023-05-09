@@ -258,5 +258,7 @@ migrate -path=sql/migrations -database "mysql://root:root@tcp(mysql:3306)/chat_t
 
 
 1- Ajustar Front: deixar a interface bem dinâmica, perfomática e com boa usabilidade;
+  - Scrollbar sempre bottom por padrão
+  - Melhorar o input textarea 
 2- Adicionar autenticação via Google com Nextauth;
 3- Adicionar opção de deletar e editar o nome de conversas/chat.

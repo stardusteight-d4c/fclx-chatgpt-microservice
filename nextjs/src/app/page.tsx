@@ -100,6 +100,15 @@ export default function Home() {
     })
   }, [])
 
+  useEffect(() => {
+    const chatContainer: HTMLElement | null =
+      document.getElementById('chat-container')
+    if (chatContainer) {
+      chatContainer.scrollTop =
+        chatContainer.scrollHeight - chatContainer.clientHeight
+    }
+  }, [messageLoading])
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const txtarea = event.currentTarget.querySelector(
@@ -125,8 +134,9 @@ export default function Home() {
   }
 
   return (
-    <section className="flex w-full h-full">
-      <aside className="flex p-2 flex-col bg-black min-w-[260px] max-w-[260px] h-screen text-text">
+    <section className="flex relative w-full overflow-x-hidden max-w-[100vw] h-full">
+      <i className="bg-black min-w-[260px] max-w-[260px] min-h-scree max-h-screen -z-10" />
+      <aside className="fixed left-0 flex p-2 flex-col bg-black min-w-[260px] max-w-[260px] h-screen text-text">
         <button
           type="button"
           onClick={() => {
@@ -138,7 +148,7 @@ export default function Home() {
         >
           <PlusIcon className="w-5 h-5" /> New Chat
         </button>
-        <ul className="scrollHiddenCSO scrollHiddenIEF overflow-y-scroll flex flex-col overflow-x-hidden h-full">
+        <ul className="scrollHiddenCSO scrollHiddenIEF flex flex-col overflow-x-hidden h-full">
           {chats!.map(
             (chat: ChatWithFirstMessage, index: Key | null | undefined) => (
               <li
@@ -164,8 +174,8 @@ export default function Home() {
           </div>
         </ul>
       </aside>
-      <main className="flex flex-1 relative bg-[#343541]">
-        <div className="h-screen overflow-y-scroll w-full text-text-variant">
+      <main className="flex w-full relative bg-[#343541]">
+        <div id="chat-container" className="h-screen overflow-y-scroll w-full text-text-variant">
           {messages === undefined || messages?.length === 0 ? (
             <>
               <div className="absolute flex flex-col items-center justify-center left-1/2 -translate-x-1/2 top-[40%] -translate-y-1/2">
@@ -207,7 +217,8 @@ export default function Home() {
             </ul>
           )}
         </div>
-        <div className="absolute bottom-0 inset-x-0">
+
+        <div className="absolute bottom-0 w-full z-0">
           <i className="absolute bottom-0 max-h-[192px] min-h-[192px] w-full bg-gradient-to-t from-[#34373f] via-[#34373f] to-transparent" />
           <form id="form" onSubmit={onSubmit} className="relative w-full">
             <div className="absolute left-1/2 -translate-x-1/2 bottom-[55px]">
@@ -224,7 +235,7 @@ export default function Home() {
                   <ArrowRightIcon className="w-5 h-5" />
                 </button>
               </div>
-              <span className="absolute left-1/2 -translate-x-1/2 -bottom-6 text-[#c5c5d2] text-xs whitespace-nowrap">
+              <span className="absolute -bottom-6 text-[#c5c5d2] text-xs whitespace-nowrap">
                 Free Research Preview. ChatGPT may produce inaccurate
                 information about people, places, or facts.{' '}
                 <a

@@ -15,6 +15,8 @@ import {
   ArrowRightIcon,
   PlusIcon,
   LogoutIcon,
+  CheckIcon,
+  CloseIcon,
 } from './components/icons'
 
 type ChatWithFirstMessage = Chat & {
@@ -138,6 +140,44 @@ export default function Home() {
     txtarea.value = ''
   }
 
+  function handleIcons(
+    isSelected: boolean,
+    isEditing: boolean,
+    chatId: string
+  ) {
+    if (isSelected && !isEditing) {
+      return (
+        <ul>
+          <li
+            onClick={() => {
+              if (activeEditItem === '') {
+                setActiveEditItem(chatId)
+              } else {
+                setActiveEditItem('')
+              }
+            }}
+          >
+            <EditIcon className="w-5 h-5 absolute right-[34px] bottom-[14px] hover:brightness-125" />
+          </li>
+          <li>
+            <TrashIcon className="w-5 h-5 absolute right-[8px] bottom-[14px] hover:brightness-125" />
+          </li>
+        </ul>
+      )
+    } else if (isSelected && isEditing) {
+      return (
+        <ul>
+          <li>
+            <CheckIcon className="w-5 h-5 absolute right-[34px] bottom-[14px] hover:brightness-125" />
+          </li>
+          <li>
+            <CloseIcon className="w-5 h-5 absolute right-[8px] bottom-[14px] hover:brightness-125" />
+          </li>
+        </ul>
+      )
+    }
+  }
+
   return (
     <section className="flex relative w-full overflow-x-hidden max-w-[100vw] h-full">
       <i className="bg-black min-w-[260px] max-w-[260px] min-h-scree max-h-screen -z-10" />
@@ -157,6 +197,7 @@ export default function Home() {
           {chats!.map(
             (chat: ChatWithFirstMessage, index: Key | null | undefined) => {
               const isSelected = chat.id === chatIdParam
+              const isEditing = chat.id === activeEditItem
               return (
                 <li
                   key={index}
@@ -186,24 +227,7 @@ export default function Home() {
                       {chat.chat_name}
                     </p>
                   )}
-                  {isSelected && (
-                    <ul>
-                      <li
-                        onClick={() => {
-                          if (activeEditItem === '') {
-                            setActiveEditItem(chat.id)
-                          } else {
-                            setActiveEditItem('')
-                          }
-                        }}
-                      >
-                        <EditIcon className="w-5 h-5 absolute right-[34px] bottom-[14px] hover:brightness-125" />
-                      </li>
-                      <li>
-                        <TrashIcon className="w-5 h-5 absolute right-[8px] bottom-[14px] hover:brightness-125" />
-                      </li>
-                    </ul>
-                  )}
+                  {handleIcons(isSelected, isEditing, chat.id)}
                 </li>
               )
             }

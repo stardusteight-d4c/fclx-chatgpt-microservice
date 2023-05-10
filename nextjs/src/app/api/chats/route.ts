@@ -7,6 +7,7 @@ export const POST = withAuth(async (request: NextRequest, token: any) => {
   const chatCreated = await prisma.chat.create({
     data: {
       user_id: token.sub!,
+      chat_name: body.message,
       messages: {
         create: {
           content: body.message,
@@ -15,6 +16,7 @@ export const POST = withAuth(async (request: NextRequest, token: any) => {
     },
     select: {
       id: true,
+      chat_name: true,
       messages: true,
     },
   })
@@ -29,6 +31,7 @@ export const GET = withAuth(async (_request: NextRequest, token: any) => {
     },
     select: {
       id: true,
+      chat_name: true,
       messages: {
         orderBy: { created_at: 'asc' },
         take: 1,

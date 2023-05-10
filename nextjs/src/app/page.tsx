@@ -6,12 +6,16 @@ import useSWR from 'swr'
 import useSWRSubscription from 'swr/subscription'
 import ClientHttp, { fetcher } from '@/http/http'
 import { Chat, Message } from '@prisma/client'
-import { PlusIcon } from './components/icons/Plus'
-import { MessageIcon } from './components/icons/Message'
-import { ArrowRightIcon } from './components/icons/ArrowRight'
-import { LogoutIcon } from './components/icons/Logout'
 import { ChatError } from './components/chat/ChatError'
 import { ChatMessage } from './components/chat/ChatMessage'
+import {
+  EditIcon,
+  TrashIcon,
+  MessageIcon,
+  ArrowRightIcon,
+  PlusIcon,
+  LogoutIcon,
+} from './components/icons'
 
 type ChatWithFirstMessage = Chat & {
   messages: [Message]
@@ -23,6 +27,7 @@ export default function Home() {
   const chatIdParam = searchParams.get('id')
   const [chatId, setChatId] = useState<string | null>(chatIdParam)
   const [messageId, setMessageId] = useState<string | null>(null)
+  const [activeEditItem, setActiveEditItem] = useState('')
   const { data: chats, mutate: mutateChats } = useSWR<ChatWithFirstMessage[]>(
     'chats',
     fetcher,
@@ -150,17 +155,58 @@ export default function Home() {
         </button>
         <ul className="scrollHiddenCSO scrollHiddenIEF flex flex-col overflow-x-hidden h-full">
           {chats!.map(
-            (chat: ChatWithFirstMessage, index: Key | null | undefined) => (
-              <li
-                key={index}
-                onClick={() => router.push(`/?id=${chat.id}`)}
-                className="group p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541]/90 rounded-md w-full text-text mr-2 hover:cursor-pointer flex items-center whitespace-nowrap"
-              >
-                <i className="absolute right-0 bg-gradient-to-r from-transparent via-black to-black group-hover:via-[#343541] group-hover:to-[#343541] w-[50px] h-full " />
-                <MessageIcon className="max-w-[20px] min-w-[20px] h-5" />
-                {chat.messages[0].content}
-              </li>
-            )
+            (chat: ChatWithFirstMessage, index: Key | null | undefined) => {
+              const isSelected = chat.id === chatIdParam
+              return (
+                <li
+                  key={index}
+                  onClick={() => {
+                    !isSelected && router.push(`/?id=${chat.id}`)
+                  }}
+                  className={`${
+                    isSelected ? 'bg-[#343541]/90' : 'hover:bg-[#343541]/40'
+                  } group py-3 px-2 relative overflow-x-hidden gap-x-2 rounded-md w-full text-text mr-2 hover:cursor-pointer flex items-center whitespace-nowrap`}
+                >
+                  <i
+                    className={`${
+                      isSelected
+                        ? 'via-[#343541] to-[#343541] w-[115px]'
+                        : 'via-black to-black group-hover:via-[#27292f] group-hover:to-[#27292f] w-[50px]'
+                    } absolute right-0 bg-gradient-to-r from-transparent h-full`}
+                  />
+                  <MessageIcon className="max-w-[20px] min-w-[20px] h-5" />
+                  {chat.id === activeEditItem ? (
+                    <input
+                      type="text"
+                      defaultValue={chat.chat_name}
+                      className="bg-transparent outline-none max-w-[148px] w-full border border-blue-600 z-[200]"
+                    />
+                  ) : (
+                    <p className="border border-transparent">
+                      {chat.chat_name}
+                    </p>
+                  )}
+                  {isSelected && (
+                    <ul>
+                      <li
+                        onClick={() => {
+                          if (activeEditItem === '') {
+                            setActiveEditItem(chat.id)
+                          } else {
+                            setActiveEditItem('')
+                          }
+                        }}
+                      >
+                        <EditIcon className="w-5 h-5 absolute right-[34px] bottom-[14px] hover:brightness-125" />
+                      </li>
+                      <li>
+                        <TrashIcon className="w-5 h-5 absolute right-[8px] bottom-[14px] hover:brightness-125" />
+                      </li>
+                    </ul>
+                  )}
+                </li>
+              )
+            }
           )}
           <div className="mt-auto border-t border-t-gray pt-2">
             <li className="group p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541]/90 rounded-md w-full text-text mr-2 hover:cursor-default flex items-center whitespace-nowrap">
@@ -175,7 +221,10 @@ export default function Home() {
         </ul>
       </aside>
       <main className="flex w-full relative bg-[#343541]">
-        <div id="chat-container" className="h-screen overflow-y-scroll w-full text-text-variant">
+        <div
+          id="chat-container"
+          className="h-screen overflow-y-scroll w-full text-text-variant"
+        >
           {messages === undefined || messages?.length === 0 ? (
             <>
               <div className="absolute flex flex-col items-center justify-center left-1/2 -translate-x-1/2 top-[40%] -translate-y-1/2">
@@ -219,7 +268,7 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-0 w-full z-0">
-          <i className="absolute bottom-0 max-h-[192px] min-h-[192px] w-full bg-gradient-to-t from-[#34373f] via-[#34373f] to-transparent" />
+          <i className="absolute bottom-0 max-h-[192px] pointer-events-none min-h-[192px] w-full bg-gradient-to-t from-[#34373f] via-[#34373f] to-transparent" />
           <form id="form" onSubmit={onSubmit} className="relative w-full">
             <div className="absolute left-1/2 -translate-x-1/2 bottom-[55px]">
               <div className="relative w-full">

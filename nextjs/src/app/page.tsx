@@ -90,26 +90,28 @@ export default function Home() {
     const txtarea = document.querySelector(
       '#message-input'
     ) as HTMLTextAreaElement
-    txtarea.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault()
-      }
-    })
-    txtarea.addEventListener('keyup', (event) => {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        const form = document.querySelector('#form') as HTMLFormElement
-        const submitButton = form.querySelector('button') as HTMLButtonElement
-        form.requestSubmit(submitButton)
-        return
-      }
-      if (txtarea.scrollHeight >= 200) {
-        txtarea.style.overflowY = 'scroll'
-      } else {
-        txtarea.style.overflowY = 'hidden'
-        txtarea.style.height = 'auto'
-        txtarea.style.height = txtarea.scrollHeight + 'px'
-      }
-    })
+    if (txtarea) {
+      txtarea.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault()
+        }
+      })
+      txtarea.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          const form = document.querySelector('#form') as HTMLFormElement
+          const submitButton = form.querySelector('button') as HTMLButtonElement
+          form.requestSubmit(submitButton)
+          return
+        }
+        if (txtarea.scrollHeight >= 200) {
+          txtarea.style.overflowY = 'scroll'
+        } else {
+          txtarea.style.overflowY = 'hidden'
+          txtarea.style.height = 'auto'
+          txtarea.style.height = txtarea.scrollHeight + 'px'
+        }
+      })
+    }
   }, [])
 
   useEffect(() => {
@@ -126,23 +128,25 @@ export default function Home() {
     const txtarea = event.currentTarget.querySelector(
       'textarea'
     ) as HTMLTextAreaElement
-    const message = txtarea?.value
-    if (!chatId) {
-      const newChat: ChatWithFirstMessage = await ClientHttp.post('chats', {
-        message,
-      })
-      mutateChats([newChat, ...chats!], false)
-      setChatId(newChat.id)
-      setMessageId(newChat.messages[0].id)
-    } else {
-      const newMessage: Message = await ClientHttp.post(
-        `chats/${chatId}/messages`,
-        { message }
-      )
-      mutateMessages([...messages!, newMessage], false)
-      setMessageId(newMessage.id)
+    if (txtarea) {
+      const message = txtarea?.value
+      if (!chatId) {
+        const newChat: ChatWithFirstMessage = await ClientHttp.post('chats', {
+          message,
+        })
+        mutateChats([newChat, ...chats!], false)
+        setChatId(newChat.id)
+        setMessageId(newChat.messages[0].id)
+      } else {
+        const newMessage: Message = await ClientHttp.post(
+          `chats/${chatId}/messages`,
+          { message }
+        )
+        mutateMessages([...messages!, newMessage], false)
+        setMessageId(newMessage.id)
+      }
+      txtarea.value = ''
     }
-    txtarea.value = ''
   }
 
   async function onEditChatName(chatId: string) {
@@ -257,25 +261,36 @@ export default function Home() {
             }
           )}
           <div className="mt-auto border-t border-t-gray pt-2">
-            <li className="group cursor-pointer p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541]/90 rounded-md w-full text-text mr-2 flex items-center whitespace-nowrap">
-              <img
-                referrerPolicy="no-referrer"
-                src={session ? session?.user?.image! : 'user-placeholder.png'}
-                className="w-[30px] h-[30px] rounded-lg object-cover"
-              />
-              <span className="w-[140px] truncate">
-                {session ? session?.user?.name : 'Unnamed'}
-              </span>
-              {session ? (
+            {session ? (
+              <li className="group cursor-pointer p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541]/90 rounded-md w-full text-text mr-2 flex items-center whitespace-nowrap">
+                <img
+                  referrerPolicy="no-referrer"
+                  src={session?.user?.image!}
+                  className="w-[30px] h-[30px] rounded-lg object-cover"
+                />
+                <span className="w-[140px] truncate">
+                  {session?.user?.name}
+                </span>
                 <button onClick={() => signOut()}>
                   <LogoutIcon className="w-5 h-5 ml-auto cursor-pointer" />
                 </button>
-              ) : (
-                <button onClick={() => signIn()}>
+              </li>
+            ) : (
+              <li
+                onClick={() => signIn()}
+                className="group cursor-pointer p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541]/90 rounded-md w-full text-text mr-2 flex items-center whitespace-nowrap"
+              >
+                <img
+                  referrerPolicy="no-referrer"
+                  src={'user-placeholder.png'}
+                  className="w-[30px] h-[30px] rounded-lg object-cover"
+                />
+                <span className="w-[140px] truncate">{'Login'}</span>
+                <button>
                   <LoginIcon className="w-5 h-5 ml-auto cursor-pointer" />
                 </button>
-              )}
-            </li>
+              </li>
+            )}
           </div>
         </ul>
       </aside>
@@ -328,34 +343,36 @@ export default function Home() {
 
         <div className="absolute bottom-0 w-full z-0">
           <i className="absolute bottom-0 max-h-[192px] pointer-events-none min-h-[192px] w-full bg-gradient-to-t from-[#34373f] via-[#34373f] to-transparent" />
-          <form id="form" onSubmit={onSubmit} className="relative w-full">
-            <div className="absolute left-1/2 -translate-x-1/2 bottom-[55px]">
-              <div className="relative w-full">
-                <textarea
-                  id="message-input"
-                  placeholder="Send a message"
-                  className="outline-none box-border py-[12px] pl-[16px] pr-[35px] h-[50px] border border-[#303039] max-w-[768px] min-w-[768px] max-h-[218px] bg-[#40414f] text-white placeholder:text-[#8e8ea0] resize-none rounded-md"
-                />
-                <button
-                  type="submit"
-                  className="absolute text-[#89899b] hover:bg-black rounded-md transition-all p-1 right-2 top-1/2 -translate-y-1/2"
-                >
-                  <ArrowRightIcon className="w-5 h-5" />
-                </button>
+          {session && (
+            <form id="form" onSubmit={onSubmit} className="relative w-full">
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-[55px]">
+                <div className="relative w-full">
+                  <textarea
+                    id="message-input"
+                    placeholder="Send a message"
+                    className="outline-none box-border py-[12px] pl-[16px] pr-[35px] h-[50px] border border-[#303039] max-w-[768px] min-w-[768px] max-h-[218px] bg-[#40414f] text-white placeholder:text-[#8e8ea0] resize-none rounded-md"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute text-[#89899b] hover:bg-black rounded-md transition-all p-1 right-2 top-1/2 -translate-y-1/2"
+                  >
+                    <ArrowRightIcon className="w-5 h-5" />
+                  </button>
+                </div>
+                <span className="absolute -bottom-6 text-[#c5c5d2] text-xs whitespace-nowrap">
+                  Free Research Preview. ChatGPT may produce inaccurate
+                  information about people, places, or facts.{' '}
+                  <a
+                    href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes"
+                    target="_blank"
+                    className="cursor-pointer underline"
+                  >
+                    ChatGPT May 3 Version
+                  </a>
+                </span>
               </div>
-              <span className="absolute -bottom-6 text-[#c5c5d2] text-xs whitespace-nowrap">
-                Free Research Preview. ChatGPT may produce inaccurate
-                information about people, places, or facts.{' '}
-                <a
-                  href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes"
-                  target="_blank"
-                  className="cursor-pointer underline"
-                >
-                  ChatGPT May 3 Version
-                </a>
-              </span>
-            </div>
-          </form>
+            </form>
+          )}
         </div>
       </main>
     </section>

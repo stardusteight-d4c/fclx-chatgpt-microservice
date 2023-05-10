@@ -257,8 +257,15 @@ migrate -path=sql/migrations -database "mysql://root:root@tcp(mysql:3306)/chat_t
 ```
 
 
-1- Ajustar Front: deixar a interface bem dinâmica, perfomática e com boa usabilidade;
-  - Scrollbar sempre bottom por padrão
-  - Melhorar o input textarea 
+
 2- Adicionar autenticação via Google com Nextauth;
 3- Adicionar opção de deletar e editar o nome de conversas/chat.
+
+ -> criar sessão, puxar os chats através do email e deletar através do id e email
+
+
+gRPC é um framework de código aberto criado pelo Google para comunicação remota de alta performance e interoperabilidade entre serviços distribuídos. Ele usa o protocolo de transferência de dados protobuf (Protocol Buffers) para definir os contratos de serviço e a serialização de dados.
+
+O gRPC é baseado em RPC (Remote Procedure Call) e é projetado para ser eficiente, escalável e extensível. Ele usa HTTP/2 como protocolo de transporte e pode ser usado em uma variedade de linguagens de programação, incluindo C++, Java, Python, Ruby, Go e muitas outras.
+
+Entre as principais vantagens do gRPC estão a alta performance, o suporte a streaming bidirecional e a fácil definição de serviços usando arquivos protobuf. Além disso, ele oferece suporte a autenticação, segurança e balanceamento de carga integrados.

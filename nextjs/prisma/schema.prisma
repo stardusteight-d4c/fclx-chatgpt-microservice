@@ -12,6 +12,7 @@ model Chat {
   chat_name      String
   remote_chat_id String?
   user_id        String
+  user_email     String    @unique
   created_at     DateTime  @default(now())
   messages       Message[]
 }

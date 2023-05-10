@@ -8,15 +8,17 @@ import ClientHttp, { fetcher } from '@/http/http'
 import { Chat, Message } from '@prisma/client'
 import { ChatError } from './components/chat/ChatError'
 import { ChatMessage } from './components/chat/ChatMessage'
+import { useSession, signIn, signOut } from 'next-auth/react'
 import {
   EditIcon,
   TrashIcon,
   MessageIcon,
   ArrowRightIcon,
   PlusIcon,
-  LogoutIcon,
+  LoginIcon,
   CheckIcon,
   CloseIcon,
+  LogoutIcon,
 } from './components/icons'
 
 type ChatWithFirstMessage = Chat & {
@@ -24,6 +26,7 @@ type ChatWithFirstMessage = Chat & {
 }
 
 export default function Home() {
+  const { data: session } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
   const chatIdParam = searchParams.get('id')
@@ -76,6 +79,8 @@ export default function Home() {
         }
       }
     )
+
+  console.log('session', session)
 
   useEffect(() => {
     setChatId(chatIdParam)
@@ -252,13 +257,24 @@ export default function Home() {
             }
           )}
           <div className="mt-auto border-t border-t-gray pt-2">
-            <li className="group p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541]/90 rounded-md w-full text-text mr-2 hover:cursor-default flex items-center whitespace-nowrap">
+            <li className="group cursor-pointer p-3 relative overflow-x-hidden gap-x-3 hover:bg-[#343541]/90 rounded-md w-full text-text mr-2 flex items-center whitespace-nowrap">
               <img
-                src="https://github.com/stardusteight-d4c.png"
+                referrerPolicy="no-referrer"
+                src={session ? session?.user?.image! : 'user-placeholder.png'}
                 className="w-[30px] h-[30px] rounded-lg object-cover"
               />
-              <span className="w-[140px] truncate">Gabriel Sena</span>
-              <LogoutIcon className="w-5 h-5 ml-auto cursor-pointer" />
+              <span className="w-[140px] truncate">
+                {session ? session?.user?.name : 'Unnamed'}
+              </span>
+              {session ? (
+                <button onClick={() => signOut()}>
+                  <LogoutIcon className="w-5 h-5 ml-auto cursor-pointer" />
+                </button>
+              ) : (
+                <button onClick={() => signIn()}>
+                  <LoginIcon className="w-5 h-5 ml-auto cursor-pointer" />
+                </button>
+              )}
             </li>
           </div>
         </ul>

@@ -46,6 +46,10 @@ export default class ClientHttp {
   static async delete(path: string) {
     const response = await fetch(`${ClientHttp.API_URL}/${path}`, {
       method: 'DELETE',
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..X4k7ij23W4-7e1W-.zI06M9sAsiSsPtOzTNbyzDnnY3nk2sCrvMJDKK8ElnObDo4HOm60wj1c0Ck_LNJDTq2BCXUPpcPqIkpokQnxRbsad8JoJ4_VXkbCRyUcxvkwbe6gwuE3EB4OHgQcAlFkF5eyrtHUb78wKRCeNGlSVNVD9iagcP75CBrWfKpu7nRh0X08F1rwdRMi2UM.fPY20bSMaMW9jxhNVRlfxw',
+      },
     })
     const data = await response.json()
     if (!response.ok) throw new Error(data.message)

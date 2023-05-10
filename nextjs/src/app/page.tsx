@@ -152,6 +152,12 @@ export default function Home() {
     setActiveEditItem('')
   }
 
+  async function onDeleteChat(chatId: string) {
+    await ClientHttp.delete(`/chats/${chatId}`)
+    router.push('/')
+    location.reload()
+  }
+
   function handleIcons(
     isSelected: boolean,
     isEditing: boolean,
@@ -171,7 +177,7 @@ export default function Home() {
           >
             <EditIcon className="w-5 h-5 absolute right-[34px] bottom-[14px] hover:brightness-125" />
           </li>
-          <li>
+          <li onClick={() => onDeleteChat(chatId)}>
             <TrashIcon className="w-5 h-5 absolute right-[8px] bottom-[14px] hover:brightness-125" />
           </li>
         </ul>

@@ -140,6 +140,18 @@ export default function Home() {
     txtarea.value = ''
   }
 
+  async function onEditChatName(chatId: string) {
+    const chatNameInput = document.getElementById(
+      'editChatName'
+    ) as HTMLInputElement
+    const body = {
+      newChatName: chatNameInput.value,
+    }
+    await ClientHttp.put(`/chats/${chatId}`, body)
+    mutateChats()
+    setActiveEditItem('')
+  }
+
   function handleIcons(
     isSelected: boolean,
     isEditing: boolean,
@@ -167,10 +179,10 @@ export default function Home() {
     } else if (isSelected && isEditing) {
       return (
         <ul>
-          <li>
+          <li onClick={() => onEditChatName(chatId)}>
             <CheckIcon className="w-5 h-5 absolute right-[34px] bottom-[14px] hover:brightness-125" />
           </li>
-          <li>
+          <li onClick={() => setActiveEditItem('')}>
             <CloseIcon className="w-5 h-5 absolute right-[8px] bottom-[14px] hover:brightness-125" />
           </li>
         </ul>
@@ -218,6 +230,7 @@ export default function Home() {
                   <MessageIcon className="max-w-[20px] min-w-[20px] h-5" />
                   {chat.id === activeEditItem ? (
                     <input
+                      id="editChatName"
                       type="text"
                       defaultValue={chat.chat_name}
                       className="bg-transparent outline-none max-w-[148px] w-full border border-blue-600 z-[200]"

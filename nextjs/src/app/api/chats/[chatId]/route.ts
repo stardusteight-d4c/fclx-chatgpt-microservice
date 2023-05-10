@@ -21,6 +21,7 @@ export const PUT = withAuth(
         where: { id: chat.id },
         data: { chat_name: body.newChatName },
       })
+
       return NextResponse.json(updatedChat)
     } catch (err) {
       console.error(err)

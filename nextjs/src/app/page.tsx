@@ -34,21 +34,24 @@ export default function Home() {
   const [messageId, setMessageId] = useState<string | null>(null)
   const [activeEditItem, setActiveEditItem] = useState('')
   const { data: chats, mutate: mutateChats } = useSWR<ChatWithFirstMessage[]>(
-    'chats',
-    fetcher,
+    () => fetcher(`chats`, session?.user?.email!),
     {
       fallbackData: [],
       revalidateOnFocus: false,
     }
   )
   const { data: messages, mutate: mutateMessages } = useSWR<Message[]>(
-    chatId ? `chats/${chatId}/messages` : null,
-    fetcher,
+    () =>
+      fetcher(
+        `${chatId ? `/chats/${chatId}/messages` : null}`,
+        session?.user?.email!
+      ),
     {
       fallbackData: [],
       revalidateOnFocus: false,
     }
   )
+
   // server-sent event is when a web page automatically gets updates from a server
   const { data: messageLoading, error: errorMessageLoading } =
     useSWRSubscription(
@@ -80,7 +83,11 @@ export default function Home() {
       }
     )
 
-  console.log('session', session)
+  useEffect(() => {
+    if (!session) {
+      router.push('/')
+    }
+  }, [session])
 
   useEffect(() => {
     setChatId(chatIdParam)
@@ -129,18 +136,22 @@ export default function Home() {
       'textarea'
     ) as HTMLTextAreaElement
     if (txtarea) {
-      const message = txtarea?.value
+      const body = {
+        message: txtarea?.value,
+        user_email: session?.user?.email!,
+      }
       if (!chatId) {
-        const newChat: ChatWithFirstMessage = await ClientHttp.post('chats', {
-          message,
-        })
+        const newChat: ChatWithFirstMessage = await ClientHttp.post(
+          'chats',
+          body
+        )
         mutateChats([newChat, ...chats!], false)
         setChatId(newChat.id)
         setMessageId(newChat.messages[0].id)
       } else {
         const newMessage: Message = await ClientHttp.post(
           `chats/${chatId}/messages`,
-          { message }
+          body
         )
         mutateMessages([...messages!, newMessage], false)
         setMessageId(newMessage.id)

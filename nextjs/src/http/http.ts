@@ -1,25 +1,34 @@
 export default class ClientHttp {
   static API_URL: string = 'http://localhost:3000/api' as string
-
-  static async get(path: string) {
-    const response = await fetch(`${ClientHttp.API_URL}/${path}`, {
-      headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..X4k7ij23W4-7e1W-.zI06M9sAsiSsPtOzTNbyzDnnY3nk2sCrvMJDKK8ElnObDo4HOm60wj1c0Ck_LNJDTq2BCXUPpcPqIkpokQnxRbsad8JoJ4_VXkbCRyUcxvkwbe6gwuE3EB4OHgQcAlFkF5eyrtHUb78wKRCeNGlSVNVD9iagcP75CBrWfKpu7nRh0X08F1rwdRMi2UM.fPY20bSMaMW9jxhNVRlfxw',
-      },
-    })
-    const data = await response.json()
-    if (!response.ok) throw new Error(data.message)
-    return data
+  static async get(path: string, user_email: string | undefined) {
+    try {
+      const isPathNull = path === 'null'
+      if (!isPathNull) {
+        const response = await fetch(`${ClientHttp.API_URL}/${path}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: user_email ?? 'not logged in',
+          },
+        })
+        const data = await response.json()
+        return data
+      }
+      return
+    } catch (err) {
+      console.error(err)
+    }
   }
 
-  static async post(path: string, body: any) {
+  static async post(
+    path: string,
+    body: { message: string; user_email: string | undefined }
+  ) {
     const response = await fetch(`${ClientHttp.API_URL}/${path}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..X4k7ij23W4-7e1W-.zI06M9sAsiSsPtOzTNbyzDnnY3nk2sCrvMJDKK8ElnObDo4HOm60wj1c0Ck_LNJDTq2BCXUPpcPqIkpokQnxRbsad8JoJ4_VXkbCRyUcxvkwbe6gwuE3EB4OHgQcAlFkF5eyrtHUb78wKRCeNGlSVNVD9iagcP75CBrWfKpu7nRh0X08F1rwdRMi2UM.fPY20bSMaMW9jxhNVRlfxw',
+        Authorization: body.user_email ?? 'not logged in',
       },
       body: JSON.stringify(body),
     })
@@ -33,8 +42,6 @@ export default class ClientHttp {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..X4k7ij23W4-7e1W-.zI06M9sAsiSsPtOzTNbyzDnnY3nk2sCrvMJDKK8ElnObDo4HOm60wj1c0Ck_LNJDTq2BCXUPpcPqIkpokQnxRbsad8JoJ4_VXkbCRyUcxvkwbe6gwuE3EB4OHgQcAlFkF5eyrtHUb78wKRCeNGlSVNVD9iagcP75CBrWfKpu7nRh0X08F1rwdRMi2UM.fPY20bSMaMW9jxhNVRlfxw',
       },
       body: JSON.stringify(body),
     })
@@ -47,8 +54,7 @@ export default class ClientHttp {
     const response = await fetch(`${ClientHttp.API_URL}/${path}`, {
       method: 'DELETE',
       headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..X4k7ij23W4-7e1W-.zI06M9sAsiSsPtOzTNbyzDnnY3nk2sCrvMJDKK8ElnObDo4HOm60wj1c0Ck_LNJDTq2BCXUPpcPqIkpokQnxRbsad8JoJ4_VXkbCRyUcxvkwbe6gwuE3EB4OHgQcAlFkF5eyrtHUb78wKRCeNGlSVNVD9iagcP75CBrWfKpu7nRh0X08F1rwdRMi2UM.fPY20bSMaMW9jxhNVRlfxw',
+        'Content-Type': 'application/json',
       },
     })
     const data = await response.json()
@@ -57,4 +63,5 @@ export default class ClientHttp {
   }
 }
 
-export const fetcher = (path: string) => ClientHttp.get(path)
+export const fetcher = (path: string, user_email: string) =>
+  ClientHttp.get(path, user_email)

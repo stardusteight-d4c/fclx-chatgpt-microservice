@@ -10,16 +10,6 @@ export async function GET(
   const transformStream = new TransformStream()
   const writer = transformStream.writable.getWriter()
 
-  const token = await getToken({ req: request })
-
-  // if (!token) {
-  //   setTimeout(async () => {
-  //     writeStream(writer, 'error', 'Unauthenticated')
-  //     await writer.close()
-  //   }, 100)
-  //   return response(transformStream, 401)
-  // }
-
   const message = await prisma.message.findUniqueOrThrow({
     where: {
       id: params.messageId,
@@ -28,15 +18,6 @@ export async function GET(
       chat: true,
     },
   })
-
-  // if (message.chat.user_id !== token.sub) {
-  //   setTimeout(async () => {
-  //     writeStream(writer, 'error', 'Not Found')
-  //     await writer.close()
-  //   }, 100)
-  //   return response(transformStream, 404)
-  // }
-
   if (message.has_answered) {
     setTimeout(async () => {
       writeStream(writer, 'error', 'Message already answered')
@@ -44,7 +25,6 @@ export async function GET(
     }, 100)
     return response(transformStream, 403)
   }
-
   if (message.is_from_bot) {
     setTimeout(async () => {
       writeStream(writer, 'error', 'Message from bot')
@@ -52,7 +32,6 @@ export async function GET(
     }, 100)
     return response(transformStream, 403)
   }
-
   const chatService = ChatServiceClientFactory.create()
   const stream = chatService.chatStream({
     message: message.content,

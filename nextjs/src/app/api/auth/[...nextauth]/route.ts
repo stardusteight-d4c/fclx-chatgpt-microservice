@@ -2,8 +2,6 @@ import GoogleProvider from 'next-auth/providers/google'
 
 import NextAuth from 'next-auth'
 
-console.log(process.env.GOOGLE_CLIENT_ID!)
-
 export const authOptions = {
   providers: [
     GoogleProvider({

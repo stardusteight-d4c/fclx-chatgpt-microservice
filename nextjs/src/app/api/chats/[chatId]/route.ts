@@ -5,23 +5,21 @@ import { withAuth } from '../../helpers'
 export const PUT = withAuth(
   async (
     request: NextRequest,
-    token,
+    email,
     { params }: { params: { chatId: string } }
   ) => {
     const body = await request.json()
-
     const chat = await prisma.chat.findUniqueOrThrow({
       where: {
         id: params.chatId,
+        user_email: email!
       },
     })
-
     try {
       const updatedChat = await prisma.chat.update({
         where: { id: chat.id },
         data: { chat_name: body.newChatName },
       })
-
       return NextResponse.json(updatedChat)
     } catch (err) {
       console.error(err)
@@ -32,16 +30,16 @@ export const PUT = withAuth(
 
 export const DELETE = withAuth(
   async (
-    request: NextRequest,
-    token,
+    _request: NextRequest,
+    email,
     { params }: { params: { chatId: string } }
   ) => {
    const chat = await prisma.chat.findUniqueOrThrow({
       where: {
         id: params.chatId,
+        user_email: email!
       },
     })
-
     try {
       await prisma.message.deleteMany({
         where: { chat: chat },
@@ -49,7 +47,6 @@ export const DELETE = withAuth(
       const deletedChat = await prisma.chat.delete({
         where: { id: params.chatId },
       })
-
       return NextResponse.json(deletedChat)
     } catch (err) {
       console.error(err)

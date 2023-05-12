@@ -11,7 +11,7 @@ export const GET = withAuth(
     try {
       const chat = await prisma.chat.findUniqueOrThrow({
         where: {
-          user_email: email!,
+          id: params.chatId!,
         },
       })
       if (chat.user_email !== email) {
@@ -40,7 +40,7 @@ export const POST = withAuth(
     try {
       const chat = await prisma.chat.findUniqueOrThrow({
         where: {
-          user_email: email!,
+          id: params.chatId!,
         },
       })
       if (chat.user_email !== email) {

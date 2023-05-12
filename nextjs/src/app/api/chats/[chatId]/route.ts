@@ -5,14 +5,13 @@ import { withAuth } from '../../helpers'
 export const PUT = withAuth(
   async (
     request: NextRequest,
-    email,
+    _email,
     { params }: { params: { chatId: string } }
   ) => {
     const body = await request.json()
     const chat = await prisma.chat.findUniqueOrThrow({
       where: {
         id: params.chatId,
-        user_email: email!
       },
     })
     try {
@@ -37,7 +36,6 @@ export const DELETE = withAuth(
    const chat = await prisma.chat.findUniqueOrThrow({
       where: {
         id: params.chatId,
-        user_email: email!
       },
     })
     try {

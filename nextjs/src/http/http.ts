@@ -12,6 +12,10 @@ export default class ClientHttp {
           },
         })
         const data = await response.json()
+        if (data.error) {
+          console.log(data.error)
+          return
+        }
         return data
       }
       return
@@ -34,6 +38,10 @@ export default class ClientHttp {
     })
     const data = await response.json()
     if (!response.ok) throw new Error(data.message)
+    if (data.error) {
+      console.log(data.error)
+      return
+    }
     return data
   }
 
@@ -47,6 +55,10 @@ export default class ClientHttp {
     })
     const data = await response.json()
     if (!response.ok) throw new Error(data.message)
+    if (data.error) {
+      console.log(data.error)
+      return
+    }
     return data
   }
 
@@ -59,9 +71,18 @@ export default class ClientHttp {
     })
     const data = await response.json()
     if (!response.ok) throw new Error(data.message)
+    if (data.error) {
+      console.log(data.error)
+      return
+    }
     return data
   }
 }
 
-export const fetcher = (path: string, user_email: string) =>
-  ClientHttp.get(path, user_email)
+export const fetcher = ({
+  path,
+  user_email,
+}: {
+  path: string
+  user_email: string
+}) => ClientHttp.get(path, user_email)

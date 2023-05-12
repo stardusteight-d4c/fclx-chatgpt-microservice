@@ -9,7 +9,7 @@ datasource db {
 
 model Chat {
   id             String    @id @default(uuid())
-  user_email     String    @unique
+  user_email     String
   chat_name      String
   remote_chat_id String?
   created_at     DateTime  @default(now())

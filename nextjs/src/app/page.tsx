@@ -34,23 +34,27 @@ export default function Home() {
   const [messageId, setMessageId] = useState<string | null>(null)
   const [activeEditItem, setActiveEditItem] = useState('')
   const { data: chats, mutate: mutateChats } = useSWR<ChatWithFirstMessage[]>(
-    () => fetcher(`chats`, session?.user?.email!),
+    { path: 'chats', user_email: session?.user?.email! },
+    fetcher,
     {
       fallbackData: [],
       revalidateOnFocus: false,
     }
   )
   const { data: messages, mutate: mutateMessages } = useSWR<Message[]>(
-    () =>
-      fetcher(
-        `${chatId ? `/chats/${chatId}/messages` : null}`,
-        session?.user?.email!
-      ),
+    {
+      path: `${chatId ? `/chats/${chatId}/messages` : null}`,
+      user_email: session?.user?.email!,
+    },
+    fetcher,
     {
       fallbackData: [],
       revalidateOnFocus: false,
     }
   )
+
+  console.log(chats);
+  
 
   // server-sent event is when a web page automatically gets updates from a server
   const { data: messageLoading, error: errorMessageLoading } =

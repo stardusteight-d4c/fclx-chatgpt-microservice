@@ -46,8 +46,120 @@ In summary, the live chat application uses modern and efficient technologies to 
 * sqlc: A SQL Compiler
 
 ## :mailbox_with_mail: Utilities
+
+### <strong>WSL (Windows Subsystem for Linux)</strong>
+
+Technology that allows you to run Linux distributions on a computer with the Windows operating system. WSL consists of a complete Linux kernel and an operating system compatibility layer that allows Linux applications to run on Windows without the need for virtualization.
+
+With WSL, you can run native Linux applications such as the Bash shell, Linux commands and command line tools, and many other open source applications available on Linux. This allows developers, system administrators and others to work on Linux projects in a familiar environment, without the need to use a virtual machine or other emulation solution.
+
+WSL is available as an optional feature on Windows 10 and Windows Server and supports many Linux distributions including Ubuntu, Debian, Fedora and others. WSL 2 is a newer version of WSL that provides better performance and supports an improved virtualization layer, allowing Linux applications to run with better performance and security.
  
-### <strong>Clean Architecture</strong>
+#### Installation 
+
+- `wsl --install`
+ 
+### <strong>GO (Golang)</strong>
+
+GO (also known as Golang) is a programming language created in 2007 by Google software engineers Robert Griesemer, Rob Pike and Ken Thompson. It is an open source and compiled programming language that stands out for its simplicity, efficiency, performance and code readability.
+
+GO is a statically typed language, which means data types are checked at compile time. It is also a compiled programming language, which means that the code is translated into machine language before execution. This allows the GO code to be high performing and run quickly.
+
+The GO language has a simple syntax, which resembles languages ​​such as C and Java. However, GO was designed to be more efficient in terms of code writing and readability. Furthermore, the language offers features such as automatic memory management and garbage collector, making programming in GO easier for developers.
+
+Another important feature of GO is that it is a compiled language, but it provides native support for building distributed and parallel applications. This allows developers to write concurrent, parallel code that runs on multiple CPUs and allows the application to take full advantage of available hardware.
+
+GO is widely used in building back-end applications, infrastructure systems, command-line tools, networking programs and cloud services. Large companies such as Google, Uber, Dropbox and SoundCloud use GO in their daily software development operations.
+
+#### Installation 
+- `cd ~`
+- `wget https://golang.org/dl/go1.17.6.linux-amd64.tar.gz` (download the latest version of the Go package from the official website)
+- `sudo tar -C /usr/local -xzf go1.17.6.linux-amd64.tar.gz` (extract the Go package)
+
+#### Configure environment variables for Go:
+
+- `echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc`
+- `echo 'export GOPATH=$HOME/go' >> ~/.bashrc`
+- `echo 'export PATH=$PATH:$GOPATH/bin' >> ~/.bashrc`
+- `source ~/.bashrc`
+- `go version`
+
+#### Go Version Manager (GVM) 
+- `sudo apt update`
+- `sudo apt install curl git mercurial make binutils bison gcc build-essential`
+- `curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash`
+- `echo '[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"' >> ~/.bashrc`
+- `gvm version`
+
+
+
+
+
+```
+.
+├── Dockerfile
+├── Makefile
+├── api
+│   └── chat.http
+├── cmd
+│   └── chatservice
+│       ├── configs
+│       │   └── config.go
+│       └── main.go
+├── docker-compose.yaml
+├── go.mod
+├── go.sum
+├── internal
+│   ├── domain
+│   │   ├── entity
+│   │   │   ├── chat.go
+│   │   │   ├── message.go
+│   │   │   └── model.go
+│   │   └── gateway
+│   │       └── chat.go
+│   ├── infra
+│   │   ├── db
+│   │   │   ├── db.go
+│   │   │   ├── models.go
+│   │   │   └── query.sql.go
+│   │   ├── grpc
+│   │   │   ├── pb
+│   │   │   │   ├── chat.pb.go
+│   │   │   │   └── chat_grpc.pb.go
+│   │   │   ├── server
+│   │   │   │   └── server.go
+│   │   │   └── service
+│   │   │       └── chat.go
+│   │   ├── repository
+│   │   │   └── chat.go
+│   │   └── web
+│   │       ├── chat_gpt_handler.go
+│   │       └── webserver
+│   │           └── webserver.go
+│   └── usecases
+│       ├── chatcompletion
+│       │   └── completion.go
+│       └── chatcompletionstream
+│           └── completion.go
+├── proto
+│   └── chat.proto
+├── sql
+│   ├── migrations
+│   │   ├── 000001_init.down.sql
+│   │   └── 000001_init.up.sql
+│   └── queries
+│       └── query.sql
+└── sqlc.yaml
+```
+
+
+
+
+
+
+
+
+
 
 ** WSL (Subsistema do Windows para Linux)
 

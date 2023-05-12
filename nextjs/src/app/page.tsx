@@ -53,9 +53,6 @@ export default function Home() {
     }
   )
 
-  console.log(chats);
-  
-
   // server-sent event is when a web page automatically gets updates from a server
   const { data: messageLoading, error: errorMessageLoading } =
     useSWRSubscription(
@@ -177,8 +174,8 @@ export default function Home() {
   }
 
   async function onDeleteChat(chatId: string) {
-    await ClientHttp.delete(`/chats/${chatId}`)
     router.push('/')
+    await ClientHttp.delete(`/chats/${chatId}`)
     location.reload()
   }
 
@@ -297,7 +294,7 @@ export default function Home() {
               >
                 <img
                   referrerPolicy="no-referrer"
-                  src={'user-placeholder.png'}
+                  src='user-placeholder.png'
                   className="w-[30px] h-[30px] rounded-lg object-cover"
                 />
                 <span className="w-[140px] truncate">{'Login'}</span>
@@ -374,7 +371,7 @@ export default function Home() {
                     <ArrowRightIcon className="w-5 h-5" />
                   </button>
                 </div>
-                <span className="absolute -bottom-6 text-[#c5c5d2] text-xs whitespace-nowrap">
+                <span className="absolute left-1/2 -translate-x-1/2 -bottom-6 text-[#c5c5d2] text-xs whitespace-nowrap">
                   Free Research Preview. ChatGPT may produce inaccurate
                   information about people, places, or facts.{' '}
                   <a

@@ -2,6 +2,7 @@ import { Loading } from './Loading'
 import { marked } from 'marked'
 import hljs from 'highlight.js'
 import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 
 export function ChatMessage({
   content,
@@ -12,6 +13,7 @@ export function ChatMessage({
   is_from_bot: boolean
   loading?: boolean
 }) {
+  const { data: session } = useSession()
   const background = is_from_bot ? 'bg-[#444654]' : 'bg-[#343541]'
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export function ChatMessage({
       <div className="w-full flex items-start gap-x-4 py-6 max-w-[768px] min-w-[768px] mx-auto">
         {!is_from_bot ? (
           <img
-            src="https://github.com/stardusteight-d4c.png"
+            src={session?.user?.image!}
             className="w-[30px] h-[30px] rounded-lg object-cover"
           />
         ) : (

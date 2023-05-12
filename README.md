@@ -129,12 +129,25 @@ Protocol Buffers are used by gRPC to serialize the data into a language-agnostic
 
 Therefore, gRPC is a modern and efficient implementation of the RPC model that uses Protocol Buffers for data serialization and HTTP/2 as the transport protocol, making it ideal for building scalable and efficient distributed systems.
 
+## :speech_balloon: Explanations
+
+### <strong>Containerization - creating and using containers</strong>
+
+Docker technology uses the Linux kernel and kernel features such as cGroups and namespaces to segregate processes. So they can run independently. The purpose of containers is to create independence: the ability to run multiple processes and apps separately to better utilize the infrastructure while maintaining the security you would have on separate systems.
+
+Container tools, including Docker, include an image-based deployment model. This makes it easy to share an application or set of services, including all their dependencies, across multiple environments. Docker also automates the deployment of the application (or sets of processes that make up an app) within this containerized environment.
+
+These tools based on Linux containers make Docker unique and easy to use. They also give users unprecedented access to apps and full control over versions and distribution, as well as the ability to deploy quickly.
 
 
 
 
 
-
+<br />
+<br />
+<br />
+<br />
+<br />
 docker network ls (list networks)
 docker network create <my-network> (create a network)
 docker network inspect <my-network> (network info)

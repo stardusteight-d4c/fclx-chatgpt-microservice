@@ -6,11 +6,17 @@
    Full Cycle Learning Experience, ChatGPT Microservice
 </h1>
 
-The e-commerce project uses a set of frontend and backend technologies to create a fully functional online store. The frontend is built with TypeScript, React, GraphQL, Redux, Vite and TailwindCSS. TypeScript is a programming language that provides static typing for JavaScript, which helps prevent errors and increases code security. React is a JavaScript library for building reactive and scalable user interfaces. GraphQL is a query and data manipulation language that allows for more efficient communication between the frontend and the backend. Redux is a library for managing state in complex JavaScript applications. Vite is a JavaScript project compilation tool that offers faster compilation times. TailwindCSS is a CSS framework that allows you to easily style your project with predefined classes.
+The application was built in the Full Cycle Learning Experience (FCLX) week, we built a real-time chat application with OpenAI's artificial intelligence (ChatGPT) using the OpenAI API.
 
-The backend is built with Node.js, TypeScript, Fastify, Prisma, Stripe and Json Web Tokens. Node.js is a JavaScript-based server application development platform. TypeScript is used again to provide statically typed code. Fastify is a lightweight and efficient web framework for Node.js. Prisma is an ORM (Object-Relational Mapping) for databases, which facilitates the application's interaction with the database. Stripe is an online payment platform for businesses. Json Web Tokens is an access token pattern that allows the application to pass authentication and authorization information between the frontend and the backend.
+On the frontend, the application was developed in TypeScript with Next.js, a server-side rendering framework for React. Next Auth was used for user authentication and authorization, allowing only authenticated users to access the chat. API routes were created with API Routes, allowing for easy and secure integration between frontend and backend.
 
-Together, these technologies allow the e-commerce project to offer users a smooth and efficient shopping experience, from browsing the product catalog to final payment.
+The SWR library was used to manage the state of the application on the frontend, supporting Stale While Revalidate (SWR) to improve performance and user experience. In addition, the application makes use of Protocol Buffers and gRPC for communication with the backend, which offers high performance and efficiency.
+
+In the backend, the application was developed in GO. Protocol Buffers and gRPC were used to communicate with the frontend, ensuring fast and efficient communication between the two systems. Docker was used to ensure application portability and Docker Compose for managing multiple containers.
+
+The application's architecture is based on Domain-Driven Design and Clean Architecture, ensuring that the application is easy to understand, modify and maintain. The MySQL database was used to store the chat data, with sqlc being used for SQL code generation.
+
+In summary, the live chat application uses modern and efficient technologies to provide an enhanced and secure user experience. With the use of Protocol Buffers and gRPC, communication between the frontend and the backend is fast and efficient. The architecture based on Domain-Driven Design and Clean Architecture ensures that the application is easy to understand and maintain. With the use of Docker, the application is easily deployed and scalable.
 
 ## :hammer_and_wrench: Tools
 

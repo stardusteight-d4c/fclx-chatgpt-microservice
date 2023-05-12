@@ -119,62 +119,20 @@ In short, Docker is a software container platform that lets you build and run in
 - `sudo chmod +x /usr/local/bin/docker-compose`
 - `docker-compose --version`
 
-```
-.
-├── Dockerfile
-├── Makefile
-├── api
-│   └── chat.http
-├── cmd
-│   └── chatservice
-│       ├── configs
-│       │   └── config.go
-│       └── main.go
-├── docker-compose.yaml
-├── go.mod
-├── go.sum
-├── internal
-│   ├── domain
-│   │   ├── entity
-│   │   │   ├── chat.go
-│   │   │   ├── message.go
-│   │   │   └── model.go
-│   │   └── gateway
-│   │       └── chat.go
-│   ├── infra
-│   │   ├── db
-│   │   │   ├── db.go
-│   │   │   ├── models.go
-│   │   │   └── query.sql.go
-│   │   ├── grpc
-│   │   │   ├── pb
-│   │   │   │   ├── chat.pb.go
-│   │   │   │   └── chat_grpc.pb.go
-│   │   │   ├── server
-│   │   │   │   └── server.go
-│   │   │   └── service
-│   │   │       └── chat.go
-│   │   ├── repository
-│   │   │   └── chat.go
-│   │   └── web
-│   │       ├── chat_gpt_handler.go
-│   │       └── webserver
-│   │           └── webserver.go
-│   └── usecases
-│       ├── chatcompletion
-│       │   └── completion.go
-│       └── chatcompletionstream
-│           └── completion.go
-├── proto
-│   └── chat.proto
-├── sql
-│   ├── migrations
-│   │   ├── 000001_init.down.sql
-│   │   └── 000001_init.up.sql
-│   └── queries
-│       └── query.sql
-└── sqlc.yaml
-```
+### gRPC (Google Remote Procedure Call)
+
+RPC (Remote Procedure Call) is a network communication model that allows a program on one computer to call a function or method on another computer without needing to understand the details of the method's implementation or the underlying network communication. RPC was created to simplify the development of distributed systems by allowing different parts of the system to communicate transparently.
+
+gRPC is a modern implementation of the RPC model that uses Protocol Buffers as the data serialization format and HTTP/2 as the transport protocol. gRPC uses a service definition and messaging system to define the service interface and automatically generate client and server code in various programming languages.
+
+Protocol Buffers are used by gRPC to serialize the data into a language-agnostic, compact and efficient way. Using Protocol Buffers as the data format allows gRPC to be space and bandwidth efficient, which is especially important in distributed systems where efficiency is crucial.
+
+Therefore, gRPC is a modern and efficient implementation of the RPC model that uses Protocol Buffers for data serialization and HTTP/2 as the transport protocol, making it ideal for building scalable and efficient distributed systems.
+
+
+
+
+
 
 
 docker network ls (list networks)
@@ -276,6 +234,62 @@ docker compose exec <service_name> bash
 
  go run cmd/chatservice/main.go
 
+```
+.
+├── Dockerfile
+├── Makefile
+├── api
+│   └── chat.http
+├── cmd
+│   └── chatservice
+│       ├── configs
+│       │   └── config.go
+│       └── main.go
+├── docker-compose.yaml
+├── go.mod
+├── go.sum
+├── internal
+│   ├── domain
+│   │   ├── entity
+│   │   │   ├── chat.go
+│   │   │   ├── message.go
+│   │   │   └── model.go
+│   │   └── gateway
+│   │       └── chat.go
+│   ├── infra
+│   │   ├── db
+│   │   │   ├── db.go
+│   │   │   ├── models.go
+│   │   │   └── query.sql.go
+│   │   ├── grpc
+│   │   │   ├── pb
+│   │   │   │   ├── chat.pb.go
+│   │   │   │   └── chat_grpc.pb.go
+│   │   │   ├── server
+│   │   │   │   └── server.go
+│   │   │   └── service
+│   │   │       └── chat.go
+│   │   ├── repository
+│   │   │   └── chat.go
+│   │   └── web
+│   │       ├── chat_gpt_handler.go
+│   │       └── webserver
+│   │           └── webserver.go
+│   └── usecases
+│       ├── chatcompletion
+│       │   └── completion.go
+│       └── chatcompletionstream
+│           └── completion.go
+├── proto
+│   └── chat.proto
+├── sql
+│   ├── migrations
+│   │   ├── 000001_init.down.sql
+│   │   └── 000001_init.up.sql
+│   └── queries
+│       └── query.sql
+└── sqlc.yaml
+```
 
 
 Erro ao inicializar os containers? Tenha certeza que instalou as dependencias com go mod tidy,

@@ -91,9 +91,33 @@ GO is widely used in building back-end applications, infrastructure systems, com
 - `echo '[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"' >> ~/.bashrc`
 - `gvm version`
 
+### Docker and Docker Compose
 
+Docker is a software container platform that lets you build, deploy, and run containerized applications. A container is an isolated unit of software that includes all the necessary dependencies for the application to run consistently, regardless of the environment in which it is running.
 
+Docker Compose, in turn, is a tool for defining and running multi-container Docker applications. It allows you to define and configure multiple containers as a single application unit and run them all with a single command.
 
+The main difference between Docker and Docker Compose is that Docker is used to build, deploy and run individual containers while Docker Compose is used to manage applications composed of multiple containers. With Docker, you can build and run a single container for each application, while with Docker Compose, you can define and run multiple containers together as a single application unit.
+
+Furthermore, Docker Compose offers a convenient way to define the configuration of an application's development or production environment, with all its containers, volumes, environment variables and other necessary settings in a single YAML file. This allows you to easily configure and run a complete application in any environment, whether locally on your development machine or on a production server.
+
+In short, Docker is a software container platform that lets you build and run individual containers, while Docker Compose is a tool for defining and running applications composed of multiple containers.
+
+#### Docker Installation
+
+- `sudo apt-get update`
+- `curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`
+- `sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"`
+- `sudo apt-get update`
+- `sudo apt-get install docker-ce`
+- `sudo usermod -aG docker $USER`
+<i>restart system</i>
+
+#### Docker Compose Installation
+
+- `sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`
+- `sudo chmod +x /usr/local/bin/docker-compose`
+- `docker-compose --version`
 
 ```
 .

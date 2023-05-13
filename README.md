@@ -139,8 +139,97 @@ Container tools, including Docker, include an image-based deployment model. This
 
 These tools based on Linux containers make Docker unique and easy to use. They also give users unprecedented access to apps and full control over versions and distribution, as well as the ability to deploy quickly.
 
+You need to have a Dockerfile even if you are working with a docker-compose.yaml file. This is because docker-compose is a tool that allows you to define and run multi-container Docker applications, while the Dockerfile is a file that contains instructions for building a Docker image that will be used by containers.
 
+docker-compose.yaml is used to configure settings for various containers and their relationships, as well as other settings such as volumes and networks. The Dockerfile file, in turn, is used to define how to build a specific Docker image, including the dependencies, configurations and other details needed to run a specific container.
 
+In other words, the Dockerfile is used to create the Docker image that will be used by the containers, while the docker-compose.yaml is used to define and orchestrate various containers that use these images. Without a Dockerfile, there is no image for docker-compose.yaml to use, so both files are needed to work with multi-container Docker applications.
+
+```dockerfile
+# chat-service/Dockerfile
+FROM ubuntu:latest
+FROM golang:1.20.3
+
+# Set environment variables
+ENV PATH="/root/.cargo/bin:${PATH}"
+ENV USER=root
+
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \ 
+    && rustup default stable \ 
+    && rustup target add x86_64-unknown-linux-gnu
+
+WORKDIR /go/src
+RUN ln -sf /bin/bash /bin/sh
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+COPY . .
+
+RUN cd /go/pkg/mod/github.com/j178/tiktoken-go@v0.2.1/tiktoken-cffi && \
+    cargo build --release
+
+RUN apt update && apt install -y protobuf-compiler && apt install -y protoc-gen-go
+RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+
+CMD [ "tail", "-f", "/dev/null" ]
+```
+
+This Dockerfile file is responsible for defining the necessary instructions for creating a custom Docker image.
+
+The Dockerfile starts by defining the base image that will be used as a starting point for building the custom image, in this case the latest Ubuntu and Golang version 1.20.3.
+
+Then the file defines some environment variables that will be used during compilation and build.
+
+Rust is installed in the container, as well as some necessary dependencies for building libraries and applications.
+
+The file defines the working directory in which the build operations will be performed. The archive then copies the go.mod and go.sum files to the working directory and runs the command go mod download && go mod verify to download and verify the modules needed for the build.
+
+It then copies the entire contents of the current source directory to the working directory in the container. After that, it runs a build script to compile the TikToken library.
+
+Then install the necessary tools to compile Protocol Buffers and gRPC, as well as protoc-gen-go-grpc, a tool that generates Go code for gRPC interfaces.
+
+Finally, the CMD command that will be executed when the container starts is defined. In this case, the command tail -f /dev/null is used to keep the container running since it doesn't have a specific application to run.
+
+```yaml
+version: '3'
+
+services:
+  chatservice:
+    build: .
+    container_name: chatservice_app
+    volumes:
+      - .:/go/src
+    ports:
+      - "8081:8080"
+      - "50052:50051"
+    networks:
+      - fcexperience
+      
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: chat_test
+      MYSQL_PASSWORD: root
+    ports:
+      - 3306:3306  
+    volumes:
+      - .docker/mysql:/var/lib/mysql
+    networks:
+      - fcexperience
+
+networks:
+  fcexperience:
+    external: true
+```
+
+This is a docker-compose YAML file that defines the configuration for two services: chatservice and mysql. The chatservice service is defined from an image built from the Dockerfile located in the current directory (.), and will be named chatservice_app inside the Docker container. It also maps host ports 8081 and 50052 to ports within the container 8080 and 50051 respectively. The shared volume between the host and the container is specified for the current directory.. The fcexperience network is used to connect the containers.
+
+The mysql service is defined as a pre-built MySQL version 8 image. It will be named mysql inside the Docker container. Environment variables are set to configure database access credentials. The shared volume is specified for the .docker/mysql directory. Host port 3306 is mapped to container port 3306. The fcexperience network is used to connect the containers.
+
+This configuration file is run with the `docker compose up` command in the directory where it is located.
 
 
 <br />

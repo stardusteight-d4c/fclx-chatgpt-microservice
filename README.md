@@ -358,7 +358,7 @@ Useful commands for debugging (accessing the DB or getting service logs):
 - `docker exec -it nextjs-db-1 mysql -uroot -proot -h db`
 - `docker logs nextjs-db-1`
 
-Normalmente também pode ser um problema de `migrate`, onde você pode ter esquecido de gerar as tabelas. Nesta aplicação vocÊ poder gerar as migrações de formas diferentes: 
+It can also usually be a `migrate` issue, where you may have forgotten to generate the tables. In this application you can generate migrations in different ways:
 
 ##### Front-end
 
@@ -373,9 +373,7 @@ Normalmente também pode ser um problema de `migrate`, onde você pode ter esque
 
 <i>*don't forget to run the servers in their containers with `go run cmd/chatservice/main.go` and `npm run dev`</i>
 
-
-
-
+### <strong>Backend architecture in Golang</strong>
 
 ```
 .
@@ -434,3 +432,7 @@ Normalmente também pode ser um problema de `migrate`, onde você pode ter esque
 └── sqlc.yaml
 ```
 
+Há basicamente dois diretórios principais `internal` e `cmd`, o diretório `internal` contém código que é específico para a aplicação e não deve ser exposto como uma API externa. Já o diretório `cmd` contém o código para os executáveis principais da aplicação.
+
+
+- explicar mais detalhadamente a construção do microserviço até a inicialização dos servidores e gRPC, e onde é utilizada a api da OpenAI

@@ -432,7 +432,7 @@ It can also usually be a `migrate` issue, where you may have forgotten to genera
 └── sqlc.yaml
 ```
 
-Há basicamente dois diretórios principais `internal` e `cmd`, o diretório `internal` contém código que é específico para a aplicação e não deve ser exposto como uma API externa. Já o diretório `cmd` contém o código para os executáveis principais da aplicação.
+Há basicamente dois diretórios principais nessa `tree view`: `internal` e `cmd`. O diretório `internal` contém código que é específico para a aplicação e não deve ser exposto como uma API externa. Já o diretório `cmd` contém o código para os executáveis principais da aplicação.
 
 
 - explicar mais detalhadamente a construção do microserviço até a inicialização dos servidores e gRPC, e onde é utilizada a api da OpenAI

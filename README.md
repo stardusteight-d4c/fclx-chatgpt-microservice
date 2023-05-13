@@ -314,31 +314,40 @@ In addition, internal networks are also used to isolate applications from each o
 ]
 ```
 
+For the front-end to communicate with the gRPC server running locally inside a container, it was necessary to create an internal network, and thus obtain its address through the `"Gateway"` and the port on which the gRPC server was running defined in the file `docker-compose.yaml` and environment variables.
+
 ```ts
+// nextjs/src/grpc/client.ts
+
+import * as protoLoader from '@grpc/proto-loader'
+import * as grpc from '@grpc/grpc-js'
+import path from 'path'
+import { ProtoGrpcType } from './rpc/chat'
+
+const packageDefinition = protoLoader.loadSync(
+  path.resolve(process.cwd(), 'proto', 'chat.proto')
+)
+
+const proto = grpc.loadPackageDefinition(
+  packageDefinition
+) as unknown as ProtoGrpcType
+
 export const chatClient = new proto.pb.ChatService(
   '172.18.0.1:50052',
   grpc.credentials.createInsecure()
 )
 ```
 
+This code is creating a gRPC client instance for the chat service specified by the Protocol Buffers definition file in `proto.pb`, using IP address `172.18.0.1` and port `50052` to connect to the gRPC server .
+
+The second line `grpc.credentials.createInsecure()` creates an insecure communication channel to the gRPC server. This type of channel does not use SSL/TLS to encrypt communications, which means that information transmitted over it can be read and intercepted by third parties. However, in development or testing environments, it can be useful to use an unsecured channel to simplify infrastructure setup. In production environments, it is recommended to use a secure channel.
 
 
 
 
 
-
-** Commands 
 go mod tidy 
-
-docker compose ps
-docker compose up
-docker ps
-docker compose ps chat-service
-dcoker compose ls
-
-docker compose exec <service_name> bash
-
- go run cmd/chatservice/main.go
+go run cmd/chatservice/main.go
 
 ```
 .

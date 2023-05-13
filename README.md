@@ -338,16 +338,44 @@ export const chatClient = new proto.pb.ChatService(
 )
 ```
 
-This code is creating a gRPC client instance for the chat service specified by the Protocol Buffers definition file in `proto.pb`, using IP address `172.18.0.1` and port `50052` to connect to the gRPC server .
+> This code is creating a gRPC client instance for the chat service specified by the Protocol Buffers definition file in `proto.pb`, using IP address `172.18.0.1` and port `50052` to connect to the gRPC server .
 
-The second line `grpc.credentials.createInsecure()` creates an insecure communication channel to the gRPC server. This type of channel does not use SSL/TLS to encrypt communications, which means that information transmitted over it can be read and intercepted by third parties. However, in development or testing environments, it can be useful to use an unsecured channel to simplify infrastructure setup. In production environments, it is recommended to use a secure channel.
+> The second line `grpc.credentials.createInsecure()` creates an insecure communication channel to the gRPC server. This type of channel does not use SSL/TLS to encrypt communications, which means that information transmitted over it can be read and intercepted by third parties. However, in development or testing environments, it can be useful to use an unsecured channel to simplify infrastructure setup. In production environments, it is recommended to use a secure channel.</i>
+
+### <strong>Common problems</strong>
+
+#### Error initializing containers
+
+- Make sure you installed the dependencies with `go mod tidy`;
+- That there are environment variables correctly set in `.env`;
+- Delete the `.docker` directory with the command `sudo rm -r .docker`.
+
+#### Error with database
+
+Useful commands for debugging (accessing the DB or getting service logs):
+
+- `mysql -h localhost -P 3307 -u root -p`
+- `docker exec -it nextjs-db-1 mysql -uroot -proot -h db`
+- `docker logs nextjs-db-1`
+
+Normalmente também pode ser um problema de `migrate`, onde você pode ter esquecido de gerar as tabelas. Nesta aplicação vocÊ poder gerar as migrações de formas diferentes: 
+
+##### Front-end
+
+- `docker compose exec app bash`
+- `npx prisma migrate dev`
+
+##### Back-end
+
+- `docker compose exec chatservice bash`
+- `go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest`
+- `make migrate`
+
+<i>*don't forget to run the servers in their containers with `go run cmd/chatservice/main.go` and `npm run dev`</i>
 
 
 
 
-
-go mod tidy 
-go run cmd/chatservice/main.go
 
 ```
 .
@@ -406,88 +434,3 @@ go run cmd/chatservice/main.go
 └── sqlc.yaml
 ```
 
-
-Erro ao inicializar os containers? Tenha certeza que instalou as dependencias com go mod tidy,
-que haja as variaveis de ambientes corretamente configuradas em .env.
-
-Depois tive o seguinte erro:
-
-mysql  | 2023-05-04T18:28:09.899430Z 1 [ERROR] [MY-011087] [Server] Different lower_case_table_names settings for server ('0') and data dictionary ('2').
-mysql  | 2023-05-04T18:28:09.899771Z 0 [ERROR] [MY-010020] [Server] Data Dictionary initialization failed.
-
-deletei o diretório .docker com 'sudo rm -r .docker' e corrigiu :)
-
-
-
-
-```
-Error: 14 UNAVAILABLE: No connection established
-    at callErrorFromStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/call.js:31:19)
-    at Object.onReceiveStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client.js:347:73)
-    at Object.onReceiveStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client-interceptors.js:308:181)
-    at eval (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/resolving-call.js:94:78)
-    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
-for call at
-    at ServiceClientImpl.makeServerStreamRequest (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client.js:330:34)
-    at ServiceClientImpl.eval (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/make-client.js:103:19)
-    at ChatServiceClient.chatStream (webpack-internal:///(sc_server)/./src/grpc/chat-service-client.ts:18:40)
-    at GET (webpack-internal:///(sc_server)/./src/app/api/messages/[messageId]/events/route.ts:55:32) {
-  code: 14,
-  details: 'No connection established',
-  metadata: Metadata { internalRepr: Map(0) {}, options: {} }
-}
-```
-
-mysql -h localhost -P 3307 -u root -p
-docker exec -it nextjs-db-1 mysql -uroot -proot -h db
-docker logs nextjs-db-1
-
-
-Error: 2 UNKNOWN: error persisting new chat: Error 1146 (42S02): Table 'chat_test.chats' doesn't exist
-    at callErrorFromStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/call.js:31:19)
-    at Object.onReceiveStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client.js:347:73)
-    at Object.onReceiveStatus (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client-interceptors.js:308:181)
-    at eval (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/resolving-call.js:94:78)
-    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
-for call at
-    at ServiceClientImpl.makeServerStreamRequest (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/client.js:330:34)
-    at ServiceClientImpl.eval (webpack-internal:///(sc_server)/./node_modules/@grpc/grpc-js/build/src/make-client.js:103:19)
-    at ChatServiceClient.chatStream (webpack-internal:///(sc_server)/./src/grpc/chat-service-client.ts:18:40)
-    at GET (webpack-internal:///(sc_server)/./src/app/api/messages/[messageId]/events/route.ts:55:32) {
-  code: 2,
-  details: "error persisting new chat: Error 1146 (42S02): Table 'chat_test.chats' doesn't exist",
-  metadata: Metadata {
-    internalRepr: Map(1) { 'content-type' => [Array] },
-    options: {}
-  }
-}
-
-
-
-docker compose exec chatservice bash
-go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
-make migrate
-
-```
-root@e60e6bcb8958:/go/src# make migrate
-migrate -path=sql/migrations -database "mysql://root:root@tcp(mysql:3306)/chat_test" -verbose up
-2023/05/05 13:59:04 Start buffering 1/u init
-2023/05/05 13:59:04 Read and execute 1/u init
-2023/05/05 13:59:04 Finished 1/u init (read 28.559462ms, ran 273.345961ms)
-2023/05/05 13:59:04 Finished after 323.311801ms
-2023/05/05 13:59:04 Closing source and database
-```
-
-
-
-2- Adicionar autenticação via Google com Nextauth;
-3- Adicionar opção de deletar e editar o nome de conversas/chat.
-
- -> criar sessão, puxar os chats através do email e deletar através do id e email
-
-
-gRPC é um framework de código aberto criado pelo Google para comunicação remota de alta performance e interoperabilidade entre serviços distribuídos. Ele usa o protocolo de transferência de dados protobuf (Protocol Buffers) para definir os contratos de serviço e a serialização de dados.
-
-O gRPC é baseado em RPC (Remote Procedure Call) e é projetado para ser eficiente, escalável e extensível. Ele usa HTTP/2 como protocolo de transporte e pode ser usado em uma variedade de linguagens de programação, incluindo C++, Java, Python, Ruby, Go e muitas outras.
-
-Entre as principais vantagens do gRPC estão a alta performance, o suporte a streaming bidirecional e a fácil definição de serviços usando arquivos protobuf. Além disso, ele oferece suporte a autenticação, segurança e balanceamento de carga integrados.

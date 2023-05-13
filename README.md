@@ -188,7 +188,7 @@ It then copies the entire contents of the current source directory to the workin
 
 Then install the necessary tools to compile Protocol Buffers and gRPC, as well as protoc-gen-go-grpc, a tool that generates Go code for gRPC interfaces.
 
-Finally, the CMD command that will be executed when the container starts is defined. In this case, the command tail -f /dev/null is used to keep the container running since it doesn't have a specific application to run.
+Finally, the CMD command that will be executed when the container starts is defined. In this case, the command `tail -f /dev/null` is used to keep the container running since it doesn't have a specific application to run.
 
 ```yaml
 version: '3'
@@ -225,102 +225,106 @@ networks:
     external: true
 ```
 
-This is a docker-compose YAML file that defines the configuration for two services: chatservice and mysql. The chatservice service is defined from an image built from the Dockerfile located in the current directory (.), and will be named chatservice_app inside the Docker container. It also maps host ports 8081 and 50052 to ports within the container 8080 and 50051 respectively. The shared volume between the host and the container is specified for the current directory.. The fcexperience network is used to connect the containers.
+This is a docker-compose YAML file that defines the configuration for two services: `chatservice` and `mysql`. The `chatservice` service is defined from an image built from the Dockerfile located in the current directory `.`, and will be named `chatservice_app` inside the Docker container. It also maps host ports 8081 and 50052 to ports within the container 8080 and 50051 respectively. The shared volume between the host and the container is specified for the current directory `.`. The `fcexperience` network is used to connect the containers.
 
-The mysql service is defined as a pre-built MySQL version 8 image. It will be named mysql inside the Docker container. Environment variables are set to configure database access credentials. The shared volume is specified for the .docker/mysql directory. Host port 3306 is mapped to container port 3306. The fcexperience network is used to connect the containers.
+The `mysql` service is defined as a pre-built MySQL version 8 image. It will be named mysql inside the Docker container. Environment variables are set to configure database access credentials. The shared volume is specified for the `.docker/mysql` directory. Host port 3306 is mapped to container port 3306. The `fcexperience` network is used to connect the containers.
 
 This configuration file is run with the `docker compose up` command in the directory where it is located.
 
+- `docker network ls (list networks)`
+- `docker network create <my-network> (create a network)`
+- `docker network inspect <my-network> (network info)`
+- `docker compose up`
+- `docker compose down`
+- `docker compose ps`
+- `docker compose ls`
+- `docker compose exec <service_name> bash`
 
-<br />
-<br />
-<br />
-<br />
-<br />
-docker network ls (list networks)
-docker network create <my-network> (create a network)
-docker network inspect <my-network> (network info)
+In the provided docker-compose example, the first port on each line represents the container port and the second port represents the host's external port. So, in the snippet:
 
 ```
+ports:
+  - "8081:8080"
+  - "50052:50051"
+```
+
+- Port 8080 is the port exposed by the `chatservice` service container.
+- Port 8081 is the host (external) port where external traffic will be received and redirected to port 8080 of the `chatservice` container.
+- Port 50051 is the port exposed by the `chatservice` service container.
+- Port 50052 is the host (external) port where external traffic will be received and redirected to port 50051 of the `chatservice` container.
+
+### <strong>Internal networks of containers</strong>
+
+The internal networks of containers in Docker are used to allow containers to communicate with each other, regardless of whether they are on different hosts. An internal network is a virtual network that is created by Docker that allows containers to communicate directly using their own IP addresses.
+
+Internal networks can be created explicitly using the docker network create command, or they can be created automatically when a new container is created and no network name is specified. When a new container is created, it is automatically added to Docker's default internal network called "bridge".
+
+Internal networks are useful for creating distributed applications that run in multiple containers, where each container runs a different part of the application. This architecture allows each part of the application to scale independently, which makes the solution more flexible and scalable.
+
+In addition, internal networks are also used to isolate applications from each other, which increases security. By default, containers on an internal network can communicate with each other, but cannot communicate with containers on other internal networks or on the host's external network. This isolation approach can help reduce the risk of an application being compromised in the event of a security breach in another application on the same host.
+
+- `docker network create fcexperience`
+- `docker network inspect fcexperience`
+
+```json
 [
-    {
-        "Name": "fcexperience",
-        "Id": "0a6aa238fde963148286a0b98aadf61f15a74c98f9c884864d30d82c5b8ffe93",
-        "Created": "2023-05-04T10:50:55.907372607-03:00",
-        "Scope": "local",
-        "Driver": "bridge",
-        "EnableIPv6": false,
-        "IPAM": {
-            "Driver": "default",
-            "Options": {},
-            "Config": [
-                {
-                    "Subnet": "172.18.0.0/16",
-                    "Gateway": "172.18.0.1"
-                }
-            ]
-        },
-        "Internal": false,
-        "Attachable": false,
-        "Ingress": false,
-        "ConfigFrom": {
-            "Network": ""
-        },
-        "ConfigOnly": false,
-        "Containers": {
-            "18b2f982e6409d264b091dfb30889924eefec255ff77034802cccefa078cbb0f": {
-                "Name": "chatservice_app",
-                "EndpointID": "4a4a76c24089e677841c9c4a16ec570f3a5b2e147f0ab42dc106cff3ed6ed3df",
-                "MacAddress": "02:42:ac:12:00:03",
-                "IPv4Address": "172.18.0.3/16",
-                "IPv6Address": ""
-            },
-            "a8ced43a5453767ddecda855f84f3baeaa26c03c5d93a509f3135620ea653176": {
-                "Name": "mysql",
-                "EndpointID": "3cd758da08149fe875fbe723ff749068b13acbc2f4c8049b4815c030a1c7f423",
-                "MacAddress": "02:42:ac:12:00:02",
-                "IPv4Address": "172.18.0.2/16",
-                "IPv6Address": ""
-            }
-        },
-        "Options": {},
-        "Labels": {}
-    }
+  {
+    "Name": "fcexperience",
+    "Id": "0a6aa238fde963148286a0b98aadf61f15a74c98f9c884864d30d82c5b8ffe93",
+    "Created": "2023-05-04T10:50:55.907372607-03:00",
+    "Scope": "local",
+    "Driver": "bridge",
+    "EnableIPv6": false,
+    "IPAM": {
+      "Driver": "default",
+      "Options": {},
+      "Config": [
+        {
+          "Subnet": "172.18.0.0/16",
+          "Gateway": "172.18.0.1"
+        }
+      ]
+    },
+    "Internal": false,
+    "Attachable": false,
+    "Ingress": false,
+    "ConfigFrom": {
+      "Network": ""
+    },
+    "ConfigOnly": false,
+    "Containers": {
+      "18b2f982e6409d264b091dfb30889924eefec255ff77034802cccefa078cbb0f": {
+        "Name": "chatservice_app",
+        "EndpointID": "4a4a76c24089e677841c9c4a16ec570f3a5b2e147f0ab42dc106cff3ed6ed3df",
+        "MacAddress": "02:42:ac:12:00:03",
+        "IPv4Address": "172.18.0.3/16",
+        "IPv6Address": ""
+      },
+      "a8ced43a5453767ddecda855f84f3baeaa26c03c5d93a509f3135620ea653176": {
+        "Name": "mysql",
+        "EndpointID": "3cd758da08149fe875fbe723ff749068b13acbc2f4c8049b4815c030a1c7f423",
+        "MacAddress": "02:42:ac:12:00:02",
+        "IPv4Address": "172.18.0.2/16",
+        "IPv6Address": ""
+      }
+    },
+    "Options": {},
+    "Labels": {}
+  }
 ]
 ```
 
-*** Set a network for container
-
+```ts
+export const chatClient = new proto.pb.ChatService(
+  '172.18.0.1:50052',
+  grpc.credentials.createInsecure()
+)
 ```
-version: '3'
 
-services:
-  app:
-    build: .
-    ports:
-      - 3000:3000
-    user: root
-    volumes:
-      - .:/home/node/app
-    networks:
-      - fcexperience
 
-  db:
-    image: mysql:8.0.30-debian
-    ports:
-      - 3307:3306
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=chat
-    volumes:
-      - .docker/dbdata:/var/lib/mysql
-    networks:
-      - fcexperience
-      
-networks:
-  fcexperience:
-    external: true
-```
+
+
+
 
 
 ** Commands 

@@ -437,7 +437,15 @@ There are basically two main directories in this `tree view`: `internal` and `cm
 │       └── query.sql
 └── sqlc.yaml
 ```
+#### Domain
 
+In domain-oriented software architecture (DDD), the domain layer is responsible for encapsulating the business logic and rules that govern the core functionality of the system. It is the heart of the system, where knowledge about the domain is modeled, captured and expressed in code.
 
+The domain layer in DDD is composed of classes and objects that represent domain concepts, such as entities, value objects and aggregates. These objects encapsulate domain state and behavior, implementing domain-specific business logic. They should not be responsible for infrastructure-related tasks such as database access or user interface interaction.
 
+One of the main goals of the domain layer in DDD is to provide a ubiquitous language for all participants involved in the system design. The ubiquitous language is a shared vocabulary that describes domain concepts and business rules in a clear and precise manner. This language is used to model the system in code and to facilitate communication between business and technical team members.
+
+The domain layer in DDD is also responsible for ensuring the integrity of system data and the consistency of operations performed by the system. Validation rules and business constraints are implemented at this layer to ensure that system data is always in a valid and consistent state.
+
+In summary, the domain layer in DDD is one of the most important parts of the system, responsible for encapsulating the business logic and ensuring the consistency and integrity of the system's data. It is modeled using the ubiquitous language, which is shared by everyone involved in the system design.
 

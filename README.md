@@ -375,6 +375,12 @@ It can also usually be a `migrate` issue, where you may have forgotten to genera
 
 ### <strong>Backend architecture in Golang</strong>
 
+In GO it is common to follow the "clean architecture" pattern, which emphasizes the separation of responsibilities and independence between the layers of the system. In this pattern, the business layer is kept at the center and is responsible for the business logic, while the outer layers like the UI and infrastructure layer are kept separate.
+
+Another common pattern in Go is "dependency injection", which allows dependencies to be flexibly injected into a code structure without requiring the code to directly depend on a specific implementation. This makes the code more modular and testable.
+
+There are basically two main directories in this `tree view`: `internal` and `cmd`. The `internal` directory contains code that is specific to the application and should not be exposed as an external API. The `cmd` directory contains the code for the application's main executables:
+
 ```
 .
 ├── Dockerfile
@@ -432,7 +438,6 @@ It can also usually be a `migrate` issue, where you may have forgotten to genera
 └── sqlc.yaml
 ```
 
-Há basicamente dois diretórios principais nessa `tree view`: `internal` e `cmd`. O diretório `internal` contém código que é específico para a aplicação e não deve ser exposto como uma API externa. Já o diretório `cmd` contém o código para os executáveis principais da aplicação.
 
 
-- explicar mais detalhadamente a construção do microserviço até a inicialização dos servidores e gRPC, e onde é utilizada a api da OpenAI
+

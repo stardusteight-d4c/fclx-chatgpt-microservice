@@ -449,3 +449,102 @@ The domain layer in DDD is also responsible for ensuring the integrity of system
 
 In summary, the domain layer in DDD is one of the most important parts of the system, responsible for encapsulating the business logic and ensuring the consistency and integrity of the system's data. It is modeled using the ubiquitous language, which is shared by everyone involved in the system design.
 
+```go
+package entity
+
+import (
+  "errors"
+
+  "github.com/google/uuid"
+)
+
+type ChatConfig struct {
+  Model            *Model
+  Temperature      float32
+  TopP             float32
+  N                int     
+  Stop             []string 
+  MaxTokens        int    
+  PresencePenalty  float32 
+  FrequencyPenalty float32 
+}
+
+type Chat struct {
+  ID                   string
+  UserID               string
+  InitialSystemMessage *Message
+  Messages             []*Message
+  ErasedMessages       []*Message
+  Status               string
+  TokenUsage           int
+  Config               *ChatConfig
+}
+
+func NewChat(userID string, initialSystemMessage *Message, chatConfig *ChatConfig) (*Chat, error) {
+  chat := &Chat{
+    ID:                   uuid.New().String(),
+    UserID:               userID,
+    InitialSystemMessage: initialSystemMessage,
+    Status:               "active",
+    Config:               chatConfig,
+    TokenUsage:           0,
+  }
+  chat.AddMessage(initialSystemMessage)
+  if err := chat.Validate(); err != nil {
+   return nil, err
+  }
+  return chat, nil
+}
+
+func (c *Chat) Validate() error {
+  if c.UserID == "" {
+    return errors.New("user id is empty")
+  }
+  if c.Status != "active" && c.Status != "ended" {
+   return errors.New("invalid status")
+  }
+  if c.Config.Temperature < 0 || c.Config.Temperature > 2 {
+   return errors.New("invalid temperature")
+  }
+  return nil
+}
+
+func (c *Chat) AddMessage(m *Message) error {
+  if c.Status == "ended" {
+   return errors.New("chatis is ended. no more messages allowed")
+  }
+  for {
+    if c.Config.Model.GetMaxTokens() >= m.GetQtdTokens()+c.TokenUsage {
+      c.Messages = append(c.Messages, m)
+      c.RefreshTokenUsage()
+      break
+    }
+    c.ErasedMessages = append(c.ErasedMessages, c.Messages[0])
+    c.Messages = c.Messages[1:]
+    c.RefreshTokenUsage()
+  }
+  return nil
+}
+
+func (c *Chat) GetMessages() []*Message {
+  return c.Messages
+}
+
+func (c *Chat) CountMessages() int {
+  return len(c.Messages)
+}
+
+func (c *Chat) End() {
+  c.Status = "ended"
+}
+
+func (c *Chat) RefreshTokenUsage() {
+  c.TokenUsage = 0
+  for m := range c.Messages {
+    c.TokenUsage += c.Messages[m].GetQtdTokens()
+  }
+}
+```
+
+> Entities in DDD are implemented as objects in code that encapsulate their attributes and related behaviors. They usually have a unique identifier, which can be a value such as a number or a string, or even a combination of attributes that together form a unique key. Entities can also have methods that implement business logic related to them.
+

@@ -548,3 +548,38 @@ func (c *Chat) RefreshTokenUsage() {
 
 > Entities in DDD are implemented as objects in code that encapsulate their attributes and related behaviors. They usually have a unique identifier, which can be a value such as a number or a string, or even a combination of attributes that together form a unique key. Entities can also have methods that implement business logic related to them.
 
+#### Gateway
+
+The "gateway" directory is a common convention in many software projects that follow the hexagonal architectural pattern (also known as ports and adapters or clean architecture). This pattern aims to separate the system's core business logic from external dependencies such as the database, third-party services, and other systems.
+
+The "gateway" package contains interfaces that define the contracts for accessing and interacting with these external system dependencies, such as the database or other services. The idea is that concrete implementations of these interfaces are provided via dependency injection, allowing the system's core business logic to be decoupled from external dependencies and tested in isolation.
+
+In the code example you provided, the "gateway" package contains the definition of the ChatGateway interface, which defines the methods for creating, retrieving, and saving a chat. This interface is used by the system's core business logic, which can be found in other packages. Concrete implementations of these methods, which communicate with the database or other services, would be provided via dependency injection.
+
+By using this approach, the core business logic of the system does not have to worry about external dependencies and can only focus on implementing the business logic. This makes the system more flexible and easier to maintain, as dependencies can be replaced or updated without affecting the system's core business logic.
+
+We can draw a parallel between the concept of `repository` and the concept of `gateway`, since both serve as an abstraction for accessing data in a system.
+
+In DDD, the repository is an interface that defines methods for creating, reading, updating, and deleting entities in a system. It is used to abstract the data persistence layer from the rest of the system, allowing the system's core business logic to work with the entities instead of being concerned with the underlying persistence layer. Repositories are usually implemented in a separate package (eg "repository") and are injected into other layers of the system to provide access to data.
+
+The gateway, in turn, is an interface that defines methods for accessing external resources (such as a database, third-party services, etc.) on a system. Like the repository, the gateway serves as an abstraction layer between the system's core business logic and external dependencies, allowing the system to be more modular and flexible. Gateways are usually implemented in a separate package (eg "gateway") and are injected into other layers of the system to provide access to external resources.
+
+In short, both the repository and the gateway are interfaces that abstract access to data within a system and help separate concerns from the system's core business logic and external dependencies. The difference is that the repository is usually associated with the data persistence layer, while the gateway can be used to access a variety of external resources.
+
+```go
+package gateway
+
+import (
+  "context"
+
+  "github.com/stardusteight-d4c/fclx-chatgpt-microservice/chat-service/internal/domain/entity"
+)
+
+type ChatGateway interface {
+  CreateChat(ctx context.Context, chat *entity.Chat) error
+  FindChatByID(ctx context.Context, chatID string) (*entity.Chat, error)
+  SaveChat(ctx context.Context, chat *entity.Chat) error
+}
+```
+
+

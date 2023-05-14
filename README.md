@@ -584,4 +584,6 @@ type ChatGateway interface {
 
 > In short, both the repository and the gateway are interfaces that abstract access to data within a system and help separate concerns from the system's core business logic and external dependencies. The difference is that the repository is usually associated with the data persistence layer, while the gateway can be used to access a variety of external resources.
 
+![screen](/screens/screen-01.png)
 
+<p align="center">Project made with :blue_heart: by <a href="https://github.com/stardusteight-d4c">Gabriel Sena</a></p>

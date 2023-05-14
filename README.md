@@ -450,6 +450,7 @@ The domain layer in DDD is also responsible for ensuring the integrity of system
 In summary, the domain layer in DDD is one of the most important parts of the system, responsible for encapsulating the business logic and ensuring the consistency and integrity of the system's data. It is modeled using the ubiquitous language, which is shared by everyone involved in the system design.
 
 ```go
+// chat-service/internal/domain/entity/chat.go
 package entity
 
 import (
@@ -564,9 +565,8 @@ In DDD, the repository is an interface that defines methods for creating, readin
 
 The gateway, in turn, is an interface that defines methods for accessing external resources (such as a database, third-party services, etc.) on a system. Like the repository, the gateway serves as an abstraction layer between the system's core business logic and external dependencies, allowing the system to be more modular and flexible. Gateways are usually implemented in a separate package (eg "gateway") and are injected into other layers of the system to provide access to external resources.
 
-In short, both the repository and the gateway are interfaces that abstract access to data within a system and help separate concerns from the system's core business logic and external dependencies. The difference is that the repository is usually associated with the data persistence layer, while the gateway can be used to access a variety of external resources.
-
 ```go
+// chat-service/internal/domain/gateway/chat.go
 package gateway
 
 import (
@@ -581,5 +581,7 @@ type ChatGateway interface {
   SaveChat(ctx context.Context, chat *entity.Chat) error
 }
 ```
+
+> In short, both the repository and the gateway are interfaces that abstract access to data within a system and help separate concerns from the system's core business logic and external dependencies. The difference is that the repository is usually associated with the data persistence layer, while the gateway can be used to access a variety of external resources.
 
 
